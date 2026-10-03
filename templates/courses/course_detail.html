@@ -8,8 +8,22 @@
         <h2>{{ course.title }}</h2>
         <p class="badge bg-secondary">{{ course.category }}</p>
         <hr>
-        <p><strong>說明：</strong>{{ course.description }}</p>
         
+        <p><strong>說明：</strong>{{ course.description }}</p>
+
+        <!-- 補上時間與地點資訊 -->
+        <p><strong>授課教師：</strong>{{ course.teacher.user.username|default:"尚未指定" }}</p>
+        <p><strong>上課地點：</strong>{{ course.get_classroom_display|default:"未定" }}</p>
+        <p><strong>上課時間：</strong>
+            {% for time in course.times.all %}
+                <span class="badge bg-info text-dark">週{{ time.weekday }} 第{{ time.period }}節</span>
+            {% empty %}
+                <span class="text-muted">尚無排課時間</span>
+            {% endfor %}
+        </p>
+        
+        <hr>
+
         {% if user.is_authenticated %}
             {% if is_enrolled %}
                 <button class="btn btn-secondary" disabled>已加選此課程</button>

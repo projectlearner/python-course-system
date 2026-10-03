@@ -10,14 +10,21 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <div class="container">
             <a class="navbar-brand" href="{% url 'courses:course_list' %}">選課系統</a>
-            <div class="navbar-nav ms-auto">
+            <!-- templates/base.html 的右側導覽列 -->
+            <div class="navbar-nav ms-auto align-items-center">
                 {% if user.is_authenticated %}
-                    <a class="nav-link" href="{% url 'courses:my_courses' %}">我的課表</a>
-                    <span class="nav-link text-light">你好，{{ user.username }}</span>
+                    <a class="nav-link me-2" href="{% url 'courses:my_courses' %}">我的課表</a>
+                    <span class="nav-link text-light me-3">你好，{{ user.username }}</span>
+                    
+                    <form action="{% url 'logout' %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-light btn-sm">登出</button>
+                    </form>
                 {% else %}
-                    <a class="nav-link" href="/admin/login/">登入</a>
+                    <!-- 將原本的 /admin/login/ 改成 /accounts/login/ -->
+                    <a class="btn btn-outline-light btn-sm" href="/accounts/login/?next={{ request.path }}">登入</a>
                 {% endif %}
-            </div>
+            </div>        
         </div>
     </nav>
 

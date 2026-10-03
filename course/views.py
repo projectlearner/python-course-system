@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import transaction
-from .models import Course, Enrollment
+from .models import Course, Enrollment, CourseTime
 
 def course_list(request):
     """課程列表"""
@@ -12,12 +12,13 @@ def course_list(request):
 
 def course_detail(request, course_id):
     """課程詳情"""
-    course = get_object_or_404(Course, id=course_id)
-    # 檢查當前登入學生是否已加選
+    # 加上 prefetch_related('times')，一次性拿好時間資料
+    course = get_object_or_404(Course.objects.prefetch_related('times'), id=course_id)
+    
     is_enrolled = False
-    if request.user.is_authenticated and hasattr(request.user, 'studentprofile'):
+    if request.user.is_authenticated and hasattr(request.user, 'student_profile'):
         is_enrolled = Enrollment.objects.filter(
-            student=request.user.studentprofile, 
+            student=request.user.student_profile, 
             course=course
         ).exists()
         
@@ -32,21 +33,35 @@ def enroll_course(request, course_id):
     if request.method == 'POST':
         course = get_object_or_404(Course, id=course_id)
         
-        # 1. 驗證是否為學生身份
-        if not hasattr(request.user, 'studentprofile'):
+        # 1. 驗證學生身份
+        if not hasattr(request.user, 'student_profile'):
             messages.error(request, '只有學生身份可以進行選課！')
             return redirect('courses:course_detail', course_id=course.id)
             
-        student = request.user.studentprofile
+        student = request.user.student_profile
 
         # 2. 檢查是否重複選課
         if Enrollment.objects.filter(student=student, course=course).exists():
             messages.warning(request, '你已經選過這門課程了。')
             return redirect('courses:course_detail', course_id=course.id)
 
-        # 3. 檢查名額限制與原子性操作（避免高併發搶課漏洞）
+        # 3. 檢查學生課表是否衝堂 (先拿已選課程 ID，再查時間)
+        enrolled_course_ids = Enrollment.objects.filter(student=student).values_list('course_id', flat=True)
+        student_enrolled_times = set(
+            CourseTime.objects.filter(course_id__in=enrolled_course_ids).values_list('weekday', 'period')
+        )
+        new_course_times = set(
+            course.times.values_list('weekday', 'period')
+        )
+
+        overlapping_times = student_enrolled_times.intersection(new_course_times)
+        if overlapping_times:
+            conflict_msg = ", ".join([f"週{w}第{p}節" for w, p in sorted(overlapping_times)])
+            messages.error(request, f'選課失敗：與已選課程時間衝堂（{conflict_msg}）！')
+            return redirect('courses:course_detail', course_id=course.id)
+
+        # 4. 檢查名額限制與原子性操作
         with transaction.atomic():
-            # 鎖定該筆課程資料確保人數計算準確
             course_obj = Course.objects.select_for_update().get(id=course_id)
             current_enrolled = Enrollment.objects.filter(course=course_obj).count()
             
@@ -54,7 +69,7 @@ def enroll_course(request, course_id):
                 messages.error(request, '選課失敗：該課程名額已滿！')
                 return redirect('courses:course_detail', course_id=course.id)
 
-            # 4. 建立選課紀錄
+            # 5. 建立選課紀錄
             Enrollment.objects.create(student=student, course=course_obj)
             messages.success(request, f'成功加選課程：{course_obj.title}！')
 
@@ -62,34 +77,52 @@ def enroll_course(request, course_id):
 
     return redirect('courses:course_list')
 
+# courses/views.py
+
 @login_required
 def my_courses(request):
     """個人課表/已選課程列表"""
-    if not hasattr(request.user, 'studentprofile'):
+    if not hasattr(request.user, 'student_profile'):
         messages.error(request, '請先完善學生資料。')
         return redirect('courses:course_list')
         
-    enrollments = Enrollment.objects.filter(student=request.user.studentprofile).select_related('course')
-    return render(request, 'courses/my_courses.html', {'enrollments': enrollments})
+    student = request.user.student_profile
+    enrollments = Enrollment.objects.filter(student=student).select_related('course').prefetch_related('course__times')
 
-# courses/views.py
+    # 初始化 5x8 的課表矩陣: { weekday: { period: [course_times] } }
+    timetable_matrix = {day: {period: [] for period in range(1, 9)} for day in range(1, 6)}
+
+    for enrollment in enrollments:
+        for time_slot in enrollment.course.times.all():
+            if 1 <= time_slot.weekday <= 5 and 1 <= time_slot.period <= 8:
+                timetable_matrix[time_slot.weekday][time_slot.period].append(time_slot)
+
+    return render(request, 'courses/my_courses.html', {
+        'enrollments': enrollments,
+        'timetable_matrix': timetable_matrix,
+        'range_1_to_5': range(1, 6),
+    })
+
 @login_required
 def drop_course(request, course_id):
     """退選課程邏輯"""
     if request.method == 'POST':
-        course = get_object_or_404(Course, id=course_id)
-        
-        if not hasattr(request.user, 'studentprofile'):
-            messages.error(request, '身分驗證失敗。')
+        # 1. 驗證學生身份
+        if not hasattr(request.user, 'student_profile'):
+            messages.error(request, '只有學生身份可以進行退選！')
             return redirect('courses:my_courses')
 
-        student = request.user.studentprofile
-        enrollment = Enrollment.objects.filter(student=student, course=course).first()
+        student = request.user.student_profile
+        course = get_object_or_404(Course, id=course_id)
 
+        # 2. 尋找並刪除選課紀錄
+        enrollment = Enrollment.objects.filter(student=student, course=course).first()
         if enrollment:
             enrollment.delete()
-            messages.success(request, f'已成功退選課程：{course.title}')
+            messages.success(request, f'已成功退選課程：{course.title}！')
         else:
-            messages.warning(request, '您並未加選該門課程。')
+            messages.error(request, '退選失敗：你尚未選修此門課程。')
+
+        return redirect('courses:my_courses')
 
     return redirect('courses:my_courses')

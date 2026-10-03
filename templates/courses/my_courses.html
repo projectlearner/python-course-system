@@ -1,65 +1,138 @@
 {% extends 'base.html' %}
 
-{% block title %}我的課表 / 已選課程{% endblock %}
-
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>我的課表</h2>
-    <a href="{% url 'courses:course_list' %}" class="btn btn-outline-primary">繼續選課</a>
-</div>
+<style>
+    /* 列印專用樣式 */
+    @media print {
+        .no-print, nav, .btn, footer {
+            display: none !important;
+        }
+        body {
+            background-color: #fff !important;
+            color: #000 !important;
+        }
+        .card {
+            border: none !important;
+        }
+        .table-bordered th, .table-bordered td {
+            border: 1px solid #000 !important;
+            color: #000 !important;
+        }
+    }
+</style>
 
-{% if enrollments %}
-<div class="table-responsive">
-    <table class="table table-hover align-middle">
-        <thead class="table-dark">
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">課程名稱</th>
-                <th scope="col">分類</th>
-                <th scope="col">授課教師</th>
-                <th scope="col">選課時間</th>
-                <th scope="col" class="text-center">操作</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for enrollment in enrollments %}
-            <tr>
-                <th scope="row">{{ forloop.counter }}</th>
-                <td>
-                    <a href="{% url 'courses:course_detail' enrollment.course.id %}" class="fw-bold text-decoration-none">
-                        {{ enrollment.course.title }}
-                    </a>
-                </td>
-                <td>
-                    <span class="badge bg-secondary">{{ enrollment.course.category }}</span>
-                </td>
-                <td>
-                    {% if enrollment.course.teacher %}
-                        {{ enrollment.course.teacher.user.get_full_name|default:enrollment.course.teacher.user.username }}
-                    {% else %}
-                        <span class="text-muted">未分配</span>
-                    {% endif %}
-                </td>
-                <td>{{ enrollment.created_at|date:"Y-m-d H:i" }}</td>
-                <td class="text-center">
-                    <!-- 退選按鈕（若已實作 drop_course 路由與視圖） -->
-                    <form action="{% url 'courses:drop_course' enrollment.course.id %}" method="post" class="d-inline" onsubmit="return confirm('確定要退選這門課程嗎？');">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-outline-danger btn-sm">退選</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-{% else %}
-<div class="card text-center p-5 bg-light">
-    <div class="card-body">
-        <h4 class="card-title text-muted">目前還沒有加選任何課程</h4>
-        <p class="card-text">前往課程列表尋找感興趣的課程吧！</p>
-        <a href="{% url 'courses:course_list' %}" class="btn btn-primary mt-2">瀏覽課程列表</a>
+<div class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 no-print">
+        <h2>我的課表</h2>
+        <button onclick="window.print()" class="btn btn-outline-info">
+            🖨️ 列印/儲存課表 (PDF)
+        </button>
+    </div>
+
+    <!-- 視覺化週課表 -->
+    <div class="card bg-dark text-light border-secondary mb-4">
+        <div class="card-header border-secondary">
+            <h5 class="mb-0">每周時間表</h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-dark table-bordered text-center align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;">節次 / 時間</th>
+                            <th style="width: 17%;">週一</th>
+                            <th style="width: 17%;">週二</th>
+                            <th style="width: 17%;">週三</th>
+                            <th style="width: 17%;">週四</th>
+                            <th style="width: 17%;">週五</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 定義 1~8 節與時間點 -->
+                        {% set periods = [
+                            (1, "第 1 節<br><small class='text-muted'>08:10 - 09:00</small>"),
+                            (2, "第 2 節<br><small class='text-muted'>09:10 - 10:00</small>"),
+                            (3, "第 3 節<br><small class='text-muted'>10:10 - 11:00</small>"),
+                            (4, "第 4 節<br><small class='text-muted'>11:10 - 12:00</small>"),
+                            (0, "午休時間<br><small class='text-muted'>12:00 - 13:30</small>"),
+                            (5, "第 5 節<br><small class='text-muted'>13:30 - 14:20</small>"),
+                            (6, "第 6 節<br><small class='text-muted'>14:30 - 15:20</small>"),
+                            (7, "第 7 節<br><small class='text-muted'>15:30 - 16:20</small>"),
+                            (8, "第 8 節<br><small class='text-muted'>16:30 - 17:20</small>")
+                        ] %}
+
+                        {% for period_num, period_label in periods %}
+                            {% if period_num == 0 %}
+                                <tr class="table-secondary text-dark fw-bold">
+                                    <td>午休</td>
+                                    <td colspan="5">午休時間 (12:00 - 13:30)</td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td class="fw-bold">{{ period_label|safe }}</td>
+                                    {% for day in range_1_to_5 %}
+                                        <td>
+                                            {% for time_slot in timetable_matrix[day][period_num] %}
+                                                <div class="p-1 bg-primary text-white rounded mb-1">
+                                                    <strong>{{ time_slot.course.title }}</strong><br>
+                                                    <small>📍 {{ time_slot.course.get_classroom_display }}</small>
+                                                </div>
+                                            {% endfor %}
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 原有清單模式（附帶退選按鈕，列印時自動隱藏） -->
+    <div class="card bg-dark text-light border-secondary no-print">
+        <div class="card-header border-secondary">
+            <h5 class="mb-0">已加選課程清單</h5>
+        </div>
+        <div class="card-body">
+            <table class="table table-dark table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>課程名稱</th>
+                        <th>上課地點</th>
+                        <th>授課教師</th>
+                        <th>上課時間</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for enrollment in enrollments %}
+                        <tr>
+                            <td>{{ enrollment.course.title }}</td>
+                            <td>{{ enrollment.course.get_classroom_display }}</td>
+                            <td>{{ enrollment.course.teacher.user.username|default:"尚未指定" }}</td>
+                            <td>
+                                {% for time in enrollment.course.times.all %}
+                                    <span class="badge bg-secondary">週{{ time.weekday }} 第{{ time.period }}節</span>
+                                {% empty %}
+                                    <span class="text-muted">未排課</span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                <form action="{% url 'courses:drop_course' enrollment.course.id %}" method="post" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('確定要退選這門課程嗎？')">退選</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">目前尚未加選任何課程。</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
-{% endif %}
 {% endblock %}

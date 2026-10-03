@@ -128,3 +128,6 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+
+LOGIN_REDIRECT_URL = '/'      # 登入成功後自動回首頁
+LOGOUT_REDIRECT_URL = '/'     # 登出成功後自動回首頁
