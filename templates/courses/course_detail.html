@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ course.title }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h2>{{ course.title }}</h2>
+        <p class="badge bg-secondary">{{ course.category }}</p>
+        <hr>
+        <p><strong>說明：</strong>{{ course.description }}</p>
+        
+        {% if user.is_authenticated %}
+            {% if is_enrolled %}
+                <button class="btn btn-secondary" disabled>已加選此課程</button>
+            {% else %}
+                <form action="{% url 'courses:enroll' course.id %}" method="post" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success">立即加選</button>
+                </form>
+            {% endif %}
+        {% else %}
+            <a href="/admin/login/?next={{ request.path }}" class="btn btn-warning">登入後即可選課</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

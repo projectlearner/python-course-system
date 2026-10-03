@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}課程列表{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">可選課程列表</h2>
+<div class="row">
+    {% for course in courses %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ course.title }}</h5>
+                <p class="card-text text-muted">{{ course.category }}</p>
+                <p class="card-text">{{ course.description|truncatewords:20 }}</p>
+            </div>
+            <div class="card-footer bg-transparent border-top-0">
+                <a href="{% url 'courses:course_detail' course.id %}" class="btn btn-outline-primary w-100">查看詳情</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p>目前沒有開放的課程。</p>
+    {% endfor %}
+</div>
+{% endblock %}

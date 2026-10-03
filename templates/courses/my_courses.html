@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}我的課表 / 已選課程{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>我的課表</h2>
+    <a href="{% url 'courses:course_list' %}" class="btn btn-outline-primary">繼續選課</a>
+</div>
+
+{% if enrollments %}
+<div class="table-responsive">
+    <table class="table table-hover align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">課程名稱</th>
+                <th scope="col">分類</th>
+                <th scope="col">授課教師</th>
+                <th scope="col">選課時間</th>
+                <th scope="col" class="text-center">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for enrollment in enrollments %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>
+                    <a href="{% url 'courses:course_detail' enrollment.course.id %}" class="fw-bold text-decoration-none">
+                        {{ enrollment.course.title }}
+                    </a>
+                </td>
+                <td>
+                    <span class="badge bg-secondary">{{ enrollment.course.category }}</span>
+                </td>
+                <td>
+                    {% if enrollment.course.teacher %}
+                        {{ enrollment.course.teacher.user.get_full_name|default:enrollment.course.teacher.user.username }}
+                    {% else %}
+                        <span class="text-muted">未分配</span>
+                    {% endif %}
+                </td>
+                <td>{{ enrollment.created_at|date:"Y-m-d H:i" }}</td>
+                <td class="text-center">
+                    <!-- 退選按鈕（若已實作 drop_course 路由與視圖） -->
+                    <form action="{% url 'courses:drop_course' enrollment.course.id %}" method="post" class="d-inline" onsubmit="return confirm('確定要退選這門課程嗎？');">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger btn-sm">退選</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="card text-center p-5 bg-light">
+    <div class="card-body">
+        <h4 class="card-title text-muted">目前還沒有加選任何課程</h4>
+        <p class="card-text">前往課程列表尋找感興趣的課程吧！</p>
+        <a href="{% url 'courses:course_list' %}" class="btn btn-primary mt-2">瀏覽課程列表</a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
