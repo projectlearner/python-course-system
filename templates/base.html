@@ -3,36 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}選課系統{% endblock %}</title>
-    <!-- 可在此引進 Bootstrap 或 Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
         <div class="container">
-            <a class="navbar-brand" href="{% url 'courses:course_list' %}">選課系統</a>
-            <!-- templates/base.html 的右側導覽列 -->
-            <div class="navbar-nav ms-auto align-items-center">
-                {% if user.is_authenticated %}
-                    <a class="nav-link me-2" href="{% url 'courses:my_courses' %}">我的課表</a>
-                    <span class="nav-link text-light me-3">你好，{{ user.username }}</span>
-                    
-                    <form action="{% url 'logout' %}" method="post" class="d-inline">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-outline-light btn-sm">登出</button>
-                    </form>
-                {% else %}
-                    <!-- 將原本的 /admin/login/ 改成 /accounts/login/ -->
-                    <a class="btn btn-outline-light btn-sm" href="/accounts/login/?next={{ request.path }}">登入</a>
-                {% endif %}
-            </div>        
+            <a class="navbar-brand fw-bold" href="{% url 'courses:course_list' %}">🎓 選課系統</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto align-items-center">
+                    {% if user.is_authenticated %}
+                        <a class="nav-link me-2" href="{% url 'courses:my_courses' %}">我的課表</a>
+                        <span class="nav-link text-light me-3">你好，{{ user.username }}</span>
+                        <form action="{% url 'logout' %}" method="post" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-light btn-sm">登出</button>
+                        </form>
+                    {% else %}
+                        <a class="btn btn-outline-light btn-sm" href="/accounts/login/?next={{ request.path }}">登入</a>
+                    {% endif %}
+                </div>
+            </div>      
         </div>
     </nav>
 
-    <div class="container">
-        <!-- Message 訊息通知（成功/失敗提醒） -->
+    <div class="container mb-5">
         {% if messages %}
             {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm" role="alert">
                     {{ message }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>

@@ -22,11 +22,11 @@ def check_student_enrollment_permission(student, course, current_phase):
     else:
         # 外系學生
         # 漏洞補強：外系專業必修永遠禁止
-        if course.type == 'REQUIRED':
+        if course.category == 'REQUIRED':
             return False, "非本系學生不可選修外系專業必修"
 
         # 外系專業選修：僅限第三階段
-        if course.type == 'ELECTIVE':
+        if course.category == 'ELECTIVE':
             if current_phase < 3:
                 return False, "外系專業選修需至第三階段才開放選修"
             return True, "可選修"

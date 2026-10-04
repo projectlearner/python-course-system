@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST
 from .utils import check_student_enrollment_permission
 
 # 目前選課階段 (全域/動態設定預設值)
-CURRENT_PHASE = 1  # 可視需求修改為 1, 2, 3
+CURRENT_PHASE = 2  # 可視需求修改為 1, 2, 3
 
 
 def check_course_permission(student, course, current_phase):
@@ -192,11 +192,11 @@ def my_courses(request):
     student = request.user.student_profile
     enrollments = Enrollment.objects.filter(student=student).select_related('course').prefetch_related('course__times')
 
-    timetable_matrix = {day: {period: [] for period in range(1, 9)} for day in range(1, 6)}
+    timetable_matrix = {day: {period: [] for period in range(1, 11)} for day in range(1, 8)}
 
     for enrollment in enrollments:
         for time_slot in enrollment.course.times.all():
-            if 1 <= time_slot.weekday <= 5 and 1 <= time_slot.period <= 8:
+            if 1 <= time_slot.weekday <= 7 and 1 <= time_slot.period <= 10:
                 timetable_matrix[time_slot.weekday][time_slot.period].append(time_slot)
 
     PERIOD_TIMES = {
@@ -204,16 +204,18 @@ def my_courses(request):
         2: '09:10 - 10:00',
         3: '10:10 - 11:00',
         4: '11:10 - 12:00',
-        5: '13:10 - 14:00',
-        6: '14:10 - 15:00',
-        7: '15:10 - 16:00',
-        8: '16:10 - 17:00',
+        5: '13:30 - 14:20',
+        6: '14:25 - 15:15',
+        7: '15:25 - 16:15',
+        8: '16:20 - 17:10',
+        9: '17:15 - 18:05',  
+        10: '', 
     }
 
     grid = []
-    for period in range(1, 9):
+    for period in range(1, 11):
         row = []
-        for day in range(1, 6):
+        for day in range(1, 8):
             row.append(timetable_matrix[day][period])
         grid.append((period, PERIOD_TIMES.get(period, ''), row))
 

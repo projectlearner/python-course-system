@@ -85,14 +85,14 @@ class Enrollment(models.Model):
 # courses/models.py (或 course/models.py)
 class Course(models.Model):
     CLASSROOM_CHOICES = [
-        ('IM_LAB', '資管系電腦教室 (B501)'),
-        ('BA_ROOM', '財稅系專業教室 (A302)'),
-        ('FIN_ROOM', '財金系金融實驗室 (C401)'),
-        ('ACC_ROOM', '會資系電腦教室 (A201)'),
-        ('IB_ROOM', '國貿系多媒體教室 (B302)'),
-        ('AM_ROOM', '企管系專業教室 (C205)'),
-        ('EN_ROOM', '英文通識教室 (C405)'),
-        ('CH_ROOM', '國文通識教室 (C301)'),
+        ('IM_LAB', '電606(承曦樓)'),
+        ('BA_ROOM', '藝305'),
+        ('FIN_ROOM', '撞球教室'),
+        ('ACC_ROOM', '藝409'),
+        ('IB_ROOM', '資401'),
+        ('AM_ROOM', '電708(承曦樓)'),
+        ('EN_ROOM', '承405'),
+        ('CH_ROOM', '藝303'),
     ]
 
     title = models.CharField(max_length=100, verbose_name="課程名稱")

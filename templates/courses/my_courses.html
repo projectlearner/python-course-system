@@ -3,7 +3,7 @@
 {% block content %}
 <style>
     /* 列印專用樣式 */
-    @media print {
+    @media print {       
         .no-print, nav, .btn, footer {
             display: none !important;
         }
@@ -57,17 +57,19 @@
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-bordered text-center">
+                <table class="table table-bordered text-center" style="table-layout: fixed; width: 100%;">
                     <thead>
                         <tr>
-                            <th>節次 / 星期</th>
-                            <th>週一</th>
-                            <th>週二</th>
-                            <th>週三</th>
-                            <th>週四</th>
-                            <th>週五</th>
+                            <th style="width: 12%;">節次 / 星期</th>
+                            <th style="width: 12.5%;">週一</th>
+                            <th style="width: 12.5%;">週二</th>
+                            <th style="width: 12.5%;">週三</th>
+                            <th style="width: 12.5%;">週四</th>
+                            <th style="width: 12.5%;">週五</th>
+                            <th style="width: 12.5%;">週六</th>
+                            <th style="width: 12.5%;">週日</th>
                         </tr>
-                    </thead>
+                    </thead>                    
                     <tbody>
                         {% for period_num, time_str, days_slots in grid %}
                         <tr>
