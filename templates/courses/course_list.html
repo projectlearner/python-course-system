@@ -4,22 +4,76 @@
 
 {% block content %}
 <h2 class="mb-4">可選課程列表</h2>
-<div class="row">
-    {% for course in courses %}
-    <div class="col-md-4 mb-4">
-        <div class="card h-100">
-            <div class="card-body">
-                <h5 class="card-title">{{ course.title }}</h5>
-                <p class="card-text text-muted">{{ course.category }}</p>
-                <p class="card-text">{{ course.description|truncatewords:20 }}</p>
-            </div>
-            <div class="card-footer bg-transparent border-top-0">
-                <a href="{% url 'courses:course_detail' course.id %}" class="btn btn-outline-primary w-100">查看詳情</a>
+
+<!-- 1. 系所篩選下拉選單 -->
+<form method="get" class="row g-3 align-items-center mb-4">
+    <div class="col-auto">
+        <label class="col-form-label fw-bold">篩選系所：</label>
+    </div>
+    <div class="col-auto">
+        <select name="dept" class="form-select" onchange="this.form.submit()">
+            <option value="">-- 全部系所 --</option>
+            {% for code, name in department_choices %}
+                <option value="{{ code }}" {% if selected_dept == code %}selected{% endif %}>
+                    {{ name }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+    {% if selected_dept %}
+        <div class="col-auto">
+            <a href="{% url 'courses:course_list' %}" class="btn btn-outline-secondary">清除篩選</a>
+        </div>
+    {% endif %}
+</form>
+
+<!-- 2. 課程列表展示 -->
+<div class="row row-cols-1 row-cols-md-2 g-4">
+    {% for item in course_data %}
+    <div class="col">
+        <div class="card h-100 shadow-sm border-0 {% if not item.can_enroll %}bg-light opacity-75{% endif %}">
+            <div class="card-body d-flex flex-column">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <!-- 同時顯示系所與必選修 -->
+                        <span class="badge bg-secondary me-1">{{ item.course.get_department_display }}</span>
+                        <span class="badge {% if item.course.category == 'REQUIRED' %}bg-danger{% elif item.course.category == 'ELECTIVE' %}bg-primary{% else %}bg-success{% endif %}">
+                            {{ item.course.get_category_display }}
+                        </span>
+                    </div>
+                    <small class="text-muted">{{ item.course.credits }} 學分</small>
+                </div>
+
+                <h5 class="card-title fw-bold">{{ item.course.title }}</h5>
+                <p class="card-text text-muted small mb-2">
+                    教師：{{ item.course.teacher.name|default:"未定" }} | 地點：{{ item.course.get_classroom_display }}
+                </p>
+                <p class="card-text text-muted small flex-grow-1">
+                    {{ item.course.description|truncatewords:20 }}
+                </p>
+
+                <!-- 選課按鈕與限制狀態提示 -->
+                <div class="mt-3 d-flex justify-content-between align-items-center pt-2 border-top">
+                    {% if item.can_enroll %}
+                        <form action="{% url 'courses:enroll_course' item.course.id %}" method="post" class="m-0">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-primary">加選課程</button>
+                        </form>
+                    {% else %}
+                        <!-- 非同系且非通識時，給予灰階按鈕與明確提示 -->
+                        <button class="btn btn-sm btn-secondary" disabled>跨系課程 (暫未開放)</button>
+                        <small class="text-danger">* 限 {{ item.course.get_department_display }} 學生</small>
+                    {% endif %}
+                    <a href="{% url 'courses:course_detail' item.course.id %}" class="btn btn-sm btn-outline-secondary">詳情</a>
+                </div>
+
             </div>
         </div>
     </div>
     {% empty %}
-    <p>目前沒有開放的課程。</p>
+    <div class="col-12">
+        <p class="text-muted">目前沒有符合條件的開放課程。</p>
+    </div>
     {% endfor %}
 </div>
 {% endblock %}

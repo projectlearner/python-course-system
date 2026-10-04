@@ -3,6 +3,26 @@ from django.contrib.auth.models import User  # 引用內建使用者
 from django.core.exceptions import ValidationError #避免重複
 # Create your models here.
 
+
+DEPARTMENT_CHOICES = [
+    ('IM', '資訊管理系'),
+    ('FIN', '財務金融系'),
+    ('BA', '企業管理系'),
+    ('PF', '財政稅務系'),
+    ('ACCT', '會計資訊系'),
+    ('IB', '國際貿易系'),
+    ('GEN', '通識教育中心'),
+]
+
+# 定義課程類別選項
+CATEGORY_CHOICES = [
+    ('REQUIRED', '專業必修'),
+    ('ELECTIVE', '專業選修'),
+    ('GENERAL', '通識課程'),
+]
+
+
+
 class Category(models.Model):
     name = models.CharField(max_length=50, verbose_name="分類名稱")
     
@@ -71,21 +91,20 @@ class Course(models.Model):
         ('ACC_ROOM', '會資系電腦教室 (A201)'),
         ('IB_ROOM', '國貿系多媒體教室 (B302)'),
         ('AM_ROOM', '企管系專業教室 (C205)'),
+        ('EN_ROOM', '英文通識教室 (C405)'),
+        ('CH_ROOM', '國文通識教室 (C301)'),
     ]
 
     title = models.CharField(max_length=100, verbose_name="課程名稱")
-    category = models.ForeignKey('Category', on_delete=models.CASCADE, verbose_name="分類")
     teacher = models.ForeignKey('users.TeacherProfile', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="授課教師")
-    description = models.TextField(verbose_name="課程描述", blank=True)
-    capacity = models.IntegerField(default=50, verbose_name="名額限制")
+    classroom = models.CharField(max_length=20, choices=CLASSROOM_CHOICES, default='IM_LAB', verbose_name="上課教室")
+    description = models.TextField(blank=True, verbose_name="課程大綱")
+    capacity = models.PositiveIntegerField(default=60, verbose_name="名額上限")
     
-    # 新增教室欄位
-    classroom = models.CharField(
-        max_length=20, 
-        choices=CLASSROOM_CHOICES, 
-        default='IM_LAB', 
-        verbose_name="上課教室"
-    )
+    # 🆕 新增欄位
+    department = models.CharField(max_length=10, choices=DEPARTMENT_CHOICES, default='IM', verbose_name="開課系所")
+    category = models.CharField(max_length=10, choices=CATEGORY_CHOICES, default='REQUIRED', verbose_name="課程類別")
+    credits = models.PositiveIntegerField(default=3, verbose_name="學分數")
 
     def __str__(self):
         return self.title

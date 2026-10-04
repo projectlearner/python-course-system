@@ -7,7 +7,7 @@
         .no-print, nav, .btn, footer {
             display: none !important;
         }
-        body {
+        /* body {
             background-color: #fff !important;
             color: #000 !important;
         }
@@ -17,6 +17,27 @@
         .table-bordered th, .table-bordered td {
             border: 1px solid #000 !important;
             color: #000 !important;
+        } */
+        .navbar, .btn, footer, .popover {
+                display: none !important;
+            }
+
+        .badge.bg-primary {
+            background-color: transparent !important;
+            color: #000 !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+        }
+
+        .table td, .table th {
+            padding: 6px !important;
+            font-size: 13px;
+        }
+
+        .print-detail {
+            font-weight: normal;
+            color: #444;
         }
     }
 </style>
@@ -36,55 +57,61 @@
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-dark table-bordered text-center align-middle mb-0">
+                <table class="table table-bordered text-center">
                     <thead>
                         <tr>
-                            <th style="width: 15%;">節次 / 時間</th>
-                            <th style="width: 17%;">週一</th>
-                            <th style="width: 17%;">週二</th>
-                            <th style="width: 17%;">週三</th>
-                            <th style="width: 17%;">週四</th>
-                            <th style="width: 17%;">週五</th>
+                            <th>節次 / 星期</th>
+                            <th>週一</th>
+                            <th>週二</th>
+                            <th>週三</th>
+                            <th>週四</th>
+                            <th>週五</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- 定義 1~8 節與時間點 -->
-                        {% set periods = [
-                            (1, "第 1 節<br><small class='text-muted'>08:10 - 09:00</small>"),
-                            (2, "第 2 節<br><small class='text-muted'>09:10 - 10:00</small>"),
-                            (3, "第 3 節<br><small class='text-muted'>10:10 - 11:00</small>"),
-                            (4, "第 4 節<br><small class='text-muted'>11:10 - 12:00</small>"),
-                            (0, "午休時間<br><small class='text-muted'>12:00 - 13:30</small>"),
-                            (5, "第 5 節<br><small class='text-muted'>13:30 - 14:20</small>"),
-                            (6, "第 6 節<br><small class='text-muted'>14:30 - 15:20</small>"),
-                            (7, "第 7 節<br><small class='text-muted'>15:30 - 16:20</small>"),
-                            (8, "第 8 節<br><small class='text-muted'>16:30 - 17:20</small>")
-                        ] %}
-
-                        {% for period_num, period_label in periods %}
-                            {% if period_num == 0 %}
-                                <tr class="table-secondary text-dark fw-bold">
-                                    <td>午休</td>
-                                    <td colspan="5">午休時間 (12:00 - 13:30)</td>
-                                </tr>
-                            {% else %}
-                                <tr>
-                                    <td class="fw-bold">{{ period_label|safe }}</td>
-                                    {% for day in range_1_to_5 %}
-                                        <td>
-                                            {% for time_slot in timetable_matrix[day][period_num] %}
-                                                <div class="p-1 bg-primary text-white rounded mb-1">
-                                                    <strong>{{ time_slot.course.title }}</strong><br>
-                                                    <small>📍 {{ time_slot.course.get_classroom_display }}</small>
-                                                </div>
-                                            {% endfor %}
-                                        </td>
-                                    {% endfor %}
-                                </tr>
-                            {% endif %}
+                        {% for period_num, time_str, days_slots in grid %}
+                        <tr>
+                            <th class="table-light align-middle">
+                                第 {{ period_num }} 節<br>
+                                <small class="text-muted fw-normal">{{ time_str }}</small>
+                            </th>
+                            {% for slots in days_slots %}
+                            <td class="align-middle">
+                                {% for time_slot in slots %}
+                                    <a href="{% url 'courses:course_detail' time_slot.course.id %}" 
+                                    class="badge bg-primary text-wrap text-decoration-none mb-1 p-2 d-block course-popover" 
+                                    data-bs-toggle="popover" 
+                                    data-bs-trigger="hover focus" 
+                                    data-bs-html="true" 
+                                    data-bs-title="<strong>{{ time_slot.course.title }}</strong>" 
+                                    data-bs-content="
+                                        <strong>授課教師：</strong>{% if time_slot.course.teacher %}{{ time_slot.course.teacher.name|default:time_slot.course.teacher.user.username }}{% else %}未定{% endif %}<br>
+                                        <strong>上課地點：</strong>{{ time_slot.course.get_classroom_display }}<br>
+                                        <strong>上課時間：</strong>週{{ time_slot.weekday }} 第{{ time_slot.period }}節
+                                    ">
+                                        <!-- 螢幕與列印都會顯示的課程名稱 -->
+                                        <div class="fw-bold">{{ time_slot.course.title }}</div>
+                                        
+                                        <!-- 只在列印時顯示的細節 (螢幕上會隱藏，不影響平時視覺) -->
+                                        <div class="d-none d-print-block print-detail mt-1">
+                                            <small>
+                                                {% if time_slot.course.teacher %}{{ time_slot.course.teacher.name|default:time_slot.course.teacher.user.username }}
+                                                    {% else %}未定
+                                                {% endif %}
+                                                <br>
+                                                {{ time_slot.course.get_classroom_display }}
+                                            </small>
+                                        </div>
+                                    </a>
+                                {% empty %}
+                                    <span class="text-muted">-</span>
+                                {% endfor %}                                                                
+                            </td>
+                            {% endfor %}
+                        </tr>
                         {% endfor %}
                     </tbody>
-                </table>
+                </table>                
             </div>
         </div>
     </div>
@@ -135,4 +162,13 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // 初始化頁面上所有的 Popover
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+            return new bootstrap.Popover(popoverTriggerEl);
+        });
+    });
+</script>
 {% endblock %}

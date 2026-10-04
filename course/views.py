@@ -3,12 +3,45 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import transaction
-from .models import Course, Enrollment, CourseTime
+from .models import Course, Enrollment, CourseTime, DEPARTMENT_CHOICES, CATEGORY_CHOICES
+from django.views.decorators.http import require_POST
+
 
 def course_list(request):
-    """課程列表"""
-    courses = Course.objects.all()
-    return render(request, 'courses/course_list.html', {'courses': courses})
+    selected_dept = request.GET.get('dept', '') # 取得前端傳來的系所篩選條件
+    
+    # 使用 select_related 避免外鍵查詢的 N+1 問題
+    courses = Course.objects.select_related('teacher').all()
+
+    # 1. 根據下拉選單篩選系所
+    if selected_dept:
+        courses = courses.filter(department=selected_dept)
+
+    # 2. 取得目前登入學生的 Profile
+    student_profile = getattr(request.user, 'student_profile', None)
+
+    # 3. 為每門課程標記是否與學生同系所，並建立簡易可選狀態
+    course_data = []
+    for course in courses:
+        # 基本邏輯：若是通識 OR 與學生同系所 -> 可選；否則 -> 提示外系課程
+        is_same_dept = student_profile and (course.department == student_profile.department)
+        is_general = (course.category == 'GENERAL')
+        
+        # 目前階段預設：可選 (同系或通識)
+        can_enroll = is_same_dept or is_general
+
+        course_data.append({
+            'course': course,
+            'is_same_dept': is_same_dept,
+            'can_enroll': can_enroll,
+        })
+
+    context = {
+        'course_data': course_data,  # 📍 修正：必須傳遞包裝後的 course_data 給前端模板
+        'department_choices': DEPARTMENT_CHOICES,
+        'selected_dept': selected_dept,
+    }
+    return render(request, 'courses/course_list.html', context)
 
 def course_detail(request, course_id):
     """課程詳情"""
@@ -97,10 +130,29 @@ def my_courses(request):
             if 1 <= time_slot.weekday <= 5 and 1 <= time_slot.period <= 8:
                 timetable_matrix[time_slot.weekday][time_slot.period].append(time_slot)
 
+    # 節次與對應時間對照表
+    PERIOD_TIMES = {
+        1: '08:10 - 09:00',
+        2: '09:10 - 10:00',
+        3: '10:10 - 11:00',
+        4: '11:10 - 12:00',
+        5: '13:10 - 14:00',
+        6: '14:10 - 15:00',
+        7: '15:10 - 16:00',
+        8: '16:10 - 17:00',
+    }
+
+    grid = []
+    for period in range(1, 9):
+        row = []
+        for day in range(1, 6):
+            row.append(timetable_matrix[day][period])
+        # 把時間直接包進 tuple 傳給 template
+        grid.append((period, PERIOD_TIMES.get(period, ''), row))
+
     return render(request, 'courses/my_courses.html', {
         'enrollments': enrollments,
-        'timetable_matrix': timetable_matrix,
-        'range_1_to_5': range(1, 6),
+        'grid': grid,  # 傳送處理好的二維列表給 template
     })
 
 @login_required

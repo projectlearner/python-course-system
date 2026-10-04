@@ -28,7 +28,7 @@
             {% if is_enrolled %}
                 <button class="btn btn-secondary" disabled>已加選此課程</button>
             {% else %}
-                <form action="{% url 'courses:enroll' course.id %}" method="post" class="d-inline">
+                <form action="{% url 'courses:enroll_course' course.id %}" method="post" class="d-inline">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-success">立即加選</button>
                 </form>
