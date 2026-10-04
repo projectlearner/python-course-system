@@ -6,13 +6,12 @@
 <div class="card">
     <div class="card-body">
         <h2>{{ course.title }}</h2>
-        <p class="badge bg-secondary">{{ course.category }}</p>
+        <p class="badge bg-secondary">{{ course.get_category_display }}</p>
         <hr>
         
         <p><strong>說明：</strong>{{ course.description }}</p>
 
-        <!-- 補上時間與地點資訊 -->
-        <p><strong>授課教師：</strong>{{ course.teacher.user.username|default:"尚未指定" }}</p>
+        <p><strong>授課教師：</strong>{{ course.teacher.name|default:"尚未指定" }}</p>
         <p><strong>上課地點：</strong>{{ course.get_classroom_display|default:"未定" }}</p>
         <p><strong>上課時間：</strong>
             {% for time in course.times.all %}
@@ -26,12 +25,22 @@
 
         {% if user.is_authenticated %}
             {% if is_enrolled %}
-                <button class="btn btn-secondary" disabled>已加選此課程</button>
-            {% else %}
+                <!-- 1. 已加選狀態 -->
+                <button class="btn btn-success btn-lg" disabled>✓ 已在課表中</button>
+            {% elif can_enroll %}
+                <!-- 2. 符合條件：顯示加選按鈕 -->
                 <form action="{% url 'courses:enroll_course' course.id %}" method="post" class="d-inline">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-success">立即加選</button>
+                    <button type="submit" class="btn btn-primary btn-lg">立即加選</button>
                 </form>
+            {% else %}
+                <!-- 3. 不符合條件：僅顯示置灰按鈕與原因 -->
+                <button class="btn btn-secondary btn-lg" disabled>無法加選</button>
+                {% if disabled_reason %}
+                    <div class="text-danger small mt-2">
+                        * {{ disabled_reason }}
+                    </div>
+                {% endif %}
             {% endif %}
         {% else %}
             <a href="/admin/login/?next={{ request.path }}" class="btn btn-warning">登入後即可選課</a>

@@ -5,6 +5,43 @@ from django.contrib import messages
 from django.db import transaction
 from .models import Course, Enrollment, CourseTime, DEPARTMENT_CHOICES, CATEGORY_CHOICES
 from django.views.decorators.http import require_POST
+from .utils import check_student_enrollment_permission
+
+# 目前選課階段 (全域/動態設定預設值)
+CURRENT_PHASE = 1  # 可視需求修改為 1, 2, 3
+
+
+def check_course_permission(student, course, current_phase):
+    """
+    統一選課權限檢查 Core Helper
+    傳回 tuple: (can_enroll, disabled_reason)
+    """
+    if not student:
+        return False, "請先登入學生帳號"
+
+    is_same_dept = (student.department == course.department)
+
+    # 1. 外系專業必修：任何階段皆全面禁止
+    if course.category == 'REQUIRED' and not is_same_dept:
+        return False, f"限 {course.get_department_display()} 學生"
+
+    # 2. 通識課程
+    if course.category == 'GENERAL':
+        if current_phase < 2:
+            return False, "通識課程需至第二階段才開放選修"
+        return True, ""
+
+    # 3. 本系課程（必修 / 選修）
+    if is_same_dept:
+        return True, ""
+
+    # 4. 外系專業選修 (category == 'ELECTIVE' 且非本系)
+    if course.category == 'ELECTIVE' and not is_same_dept:
+        if current_phase < 3:
+            return False, "跨系課程 (暫未開放)"
+        return True, ""
+
+    return False, "不符合選修條件"
 
 
 def course_list(request):
@@ -17,55 +54,83 @@ def course_list(request):
     if selected_dept:
         courses = courses.filter(department=selected_dept)
 
-    # 2. 取得目前登入學生的 Profile
+    # 2. 取得目前登入學生的 Profile 及已加選清單
     student_profile = getattr(request.user, 'student_profile', None)
+    enrolled_course_ids = set()
+    if student_profile:
+        enrolled_course_ids = set(
+            Enrollment.objects.filter(student=student_profile).values_list('course_id', flat=True)
+        )
 
-    # 3. 為每門課程標記是否與學生同系所，並建立簡易可選狀態
+    current_phase = CURRENT_PHASE
+
+    # 3. 為每門課程標記權限狀態
     course_data = []
     for course in courses:
-        # 基本邏輯：若是通識 OR 與學生同系所 -> 可選；否則 -> 提示外系課程
-        is_same_dept = student_profile and (course.department == student_profile.department)
-        is_general = (course.category == 'GENERAL')
+        is_enrolled = course.id in enrolled_course_ids
         
-        # 目前階段預設：可選 (同系或通識)
-        can_enroll = is_same_dept or is_general
+        if is_enrolled:
+            can_enroll = False
+            disabled_reason = "已在課表中"
+        else:
+            can_enroll, disabled_reason = check_course_permission(
+                student_profile, course, current_phase
+            )
 
         course_data.append({
             'course': course,
-            'is_same_dept': is_same_dept,
             'can_enroll': can_enroll,
+            'is_enrolled': is_enrolled,
+            'disabled_reason': disabled_reason,
         })
 
     context = {
-        'course_data': course_data,  # 📍 修正：必須傳遞包裝後的 course_data 給前端模板
+        'course_data': course_data,
         'department_choices': DEPARTMENT_CHOICES,
         'selected_dept': selected_dept,
+        'current_phase': current_phase,
     }
     return render(request, 'courses/course_list.html', context)
 
+
 def course_detail(request, course_id):
     """課程詳情"""
-    # 加上 prefetch_related('times')，一次性拿好時間資料
     course = get_object_or_404(Course.objects.prefetch_related('times'), id=course_id)
-    
+
     is_enrolled = False
+    can_enroll = False
+    disabled_reason = ""
+    current_phase = CURRENT_PHASE
+
     if request.user.is_authenticated and hasattr(request.user, 'student_profile'):
-        is_enrolled = Enrollment.objects.filter(
-            student=request.user.student_profile, 
-            course=course
-        ).exists()
+        student = request.user.student_profile
         
-    return render(request, 'courses/course_detail.html', {
+        # 1. 檢查是否已選過
+        is_enrolled = Enrollment.objects.filter(student=student, course=course).exists()
+
+        if is_enrolled:
+            disabled_reason = "你已選修此課程"
+        else:
+            # 2. 進行階段與科系權限判斷
+            can_enroll, disabled_reason = check_course_permission(student, course, current_phase)
+
+    context = {
         'course': course,
-        'is_enrolled': is_enrolled
-    })
+        'is_enrolled': is_enrolled,
+        'can_enroll': can_enroll,
+        'disabled_reason': disabled_reason,
+        'current_phase': current_phase,
+    }
+    return render(request, 'courses/course_detail.html', context)
+
 
 @login_required
 def enroll_course(request, course_id):
     """加選課程邏輯"""
     if request.method == 'POST':
         course = get_object_or_404(Course, id=course_id)
-        
+        current_phase = CURRENT_PHASE
+
         # 1. 驗證學生身份
         if not hasattr(request.user, 'student_profile'):
             messages.error(request, '只有學生身份可以進行選課！')
@@ -73,12 +138,18 @@ def enroll_course(request, course_id):
             
         student = request.user.student_profile
 
-        # 2. 檢查是否重複選課
+        # 2. 檢查選課階段與跨系權限（後端防呆第二防線）
+        can_enroll, disabled_reason = check_course_permission(student, course, current_phase)
+        if not can_enroll:
+            messages.error(request, f'選課失敗：{disabled_reason}！')
+            return redirect('courses:course_detail', course_id=course.id)
+
+        # 3. 檢查是否重複選課
         if Enrollment.objects.filter(student=student, course=course).exists():
             messages.warning(request, '你已經選過這門課程了。')
             return redirect('courses:course_detail', course_id=course.id)
 
-        # 3. 檢查學生課表是否衝堂 (先拿已選課程 ID，再查時間)
+        # 4. 檢查學生課表是否衝堂
         enrolled_course_ids = Enrollment.objects.filter(student=student).values_list('course_id', flat=True)
         student_enrolled_times = set(
             CourseTime.objects.filter(course_id__in=enrolled_course_ids).values_list('weekday', 'period')
@@ -93,7 +164,7 @@ def enroll_course(request, course_id):
             messages.error(request, f'選課失敗：與已選課程時間衝堂（{conflict_msg}）！')
             return redirect('courses:course_detail', course_id=course.id)
 
-        # 4. 檢查名額限制與原子性操作
+        # 5. 檢查名額限制與原子性操作 (Concurrency Control)
         with transaction.atomic():
             course_obj = Course.objects.select_for_update().get(id=course_id)
             current_enrolled = Enrollment.objects.filter(course=course_obj).count()
@@ -102,7 +173,7 @@ def enroll_course(request, course_id):
                 messages.error(request, '選課失敗：該課程名額已滿！')
                 return redirect('courses:course_detail', course_id=course.id)
 
-            # 5. 建立選課紀錄
+            # 6. 建立選課紀錄
             Enrollment.objects.create(student=student, course=course_obj)
             messages.success(request, f'成功加選課程：{course_obj.title}！')
 
@@ -110,7 +181,6 @@ def enroll_course(request, course_id):
 
     return redirect('courses:course_list')
 
-# courses/views.py
 
 @login_required
 def my_courses(request):
@@ -122,7 +192,6 @@ def my_courses(request):
     student = request.user.student_profile
     enrollments = Enrollment.objects.filter(student=student).select_related('course').prefetch_related('course__times')
 
-    # 初始化 5x8 的課表矩陣: { weekday: { period: [course_times] } }
     timetable_matrix = {day: {period: [] for period in range(1, 9)} for day in range(1, 6)}
 
     for enrollment in enrollments:
@@ -130,7 +199,6 @@ def my_courses(request):
             if 1 <= time_slot.weekday <= 5 and 1 <= time_slot.period <= 8:
                 timetable_matrix[time_slot.weekday][time_slot.period].append(time_slot)
 
-    # 節次與對應時間對照表
     PERIOD_TIMES = {
         1: '08:10 - 09:00',
         2: '09:10 - 10:00',
@@ -147,19 +215,18 @@ def my_courses(request):
         row = []
         for day in range(1, 6):
             row.append(timetable_matrix[day][period])
-        # 把時間直接包進 tuple 傳給 template
         grid.append((period, PERIOD_TIMES.get(period, ''), row))
 
     return render(request, 'courses/my_courses.html', {
         'enrollments': enrollments,
-        'grid': grid,  # 傳送處理好的二維列表給 template
+        'grid': grid,
     })
+
 
 @login_required
 def drop_course(request, course_id):
     """退選課程邏輯"""
     if request.method == 'POST':
-        # 1. 驗證學生身份
         if not hasattr(request.user, 'student_profile'):
             messages.error(request, '只有學生身份可以進行退選！')
             return redirect('courses:my_courses')
@@ -167,7 +234,6 @@ def drop_course(request, course_id):
         student = request.user.student_profile
         course = get_object_or_404(Course, id=course_id)
 
-        # 2. 尋找並刪除選課紀錄
         enrollment = Enrollment.objects.filter(student=student, course=course).first()
         if enrollment:
             enrollment.delete()

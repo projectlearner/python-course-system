@@ -3,7 +3,7 @@
 {% block title %}課程列表{% endblock %}
 
 {% block content %}
-<h2 class="mb-4">可選課程列表</h2>
+<h2 class="mb-4">可選課程列表 (階段 {{ current_phase }})</h2>
 
 <!-- 1. 系所篩選下拉選單 -->
 <form method="get" class="row g-3 align-items-center mb-4">
@@ -31,6 +31,7 @@
 <div class="row row-cols-1 row-cols-md-2 g-4">
     {% for item in course_data %}
     <div class="col">
+        <!-- 若不可加選 (can_enroll == False)，卡片加上 bg-light 與 opacity-75 變灰 -->
         <div class="card h-100 shadow-sm border-0 {% if not item.can_enroll %}bg-light opacity-75{% endif %}">
             <div class="card-body d-flex flex-column">
                 <div class="d-flex justify-content-between align-items-center mb-2">
@@ -60,11 +61,18 @@
                             <button type="submit" class="btn btn-sm btn-primary">加選課程</button>
                         </form>
                     {% else %}
-                        <!-- 非同系且非通識時，給予灰階按鈕與明確提示 -->
-                        <button class="btn btn-sm btn-secondary" disabled>跨系課程 (暫未開放)</button>
-                        <small class="text-danger">* 限 {{ item.course.get_department_display }} 學生</small>
+                        <button class="btn btn-sm btn-secondary" disabled>
+                            {% if item.is_enrolled %}
+                                已在課表中
+                            {% else %}
+                                {{ item.disabled_reason }}
+                            {% endif %}
+                        </button>
+                        {% if item.disabled_reason and not item.is_enrolled %}
+                            <small class="text-danger">* {{ item.disabled_reason }}</small>
+                        {% endif %}
                     {% endif %}
-                    <a href="{% url 'courses:course_detail' item.course.id %}" class="btn btn-sm btn-outline-secondary">詳情</a>
+                    <a href="{% url 'courses:course_detail' item.course.id %}" class="btn btn-sm btn-outline-secondary ms-auto">詳情</a>
                 </div>
 
             </div>
