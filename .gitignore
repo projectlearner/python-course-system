@@ -1,8 +1,21 @@
+# 虛擬環境
 .venv/
+
+# Python 快取與編譯檔
 __pycache__/
 *.py[cod]
-*.sqlite3
+
+# 資料庫與上傳媒體
+db.sqlite3
 /media/
+
+# 個人筆記資料夾（整個資料夾忽略）
+notes/
+
+# 環境變數與系統檔
 .env
 .DS_Store
-.txt
+
+# 編輯器設定檔
+.vscode/
+.idea/

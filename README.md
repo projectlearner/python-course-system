@@ -1,45 +1,11 @@
-```mermaid
-erDiagram
-    USER{
-        int id PK
-        string username
-    }
-    TEACHER_PROFILE{
-        int id PK
-        int user_id FK
-    }
-    STUDENT_PROFILE{
-        int id PK
-        int user_id FK
-    }
-    CATEGORY{
-        int id PK
-        string name
-    }
-    COURSE{
-        int id PK
-        int category_id FK
-        int TEACHER_PROFILE_id FK
-        string title
-    }
-    COURSE_TIME{
-        int id PK
-        int COURSE_id FK
-        string weekday
-        int period
-    }
-    ENROLLMENT{
-        int id PK
-        int STUDENT_PROFILE_id FK
-        int COURSE_id FK
-        float grade
-    }
+專案名稱：大學課程選課與成績管理系統 (University Course Registration System)
 
-    USER ||--o| TEACHER_PROFILE : extends
-    USER ||--o| STUDENT_PROFILE : extends
-    CATEGORY ||--o{ COURSE : contains
-    TEACHER_PROFILE ||--o{  COURSE : teaches
-    COURSE||--|{ COURSE_TIME : schedules
-    STUDENT_PROFILE||--o{ ENROLLMENT : enrolls
-    COURSE ||--o{ ENROLLMENT : inculdes
-```
+使用技術：Python 3.14 / Django 6.1 / Bootstrap 5 / SQLite
+
+系統角色與核心功能：
+
+學生端：課程查詢/篩選、即時加選/退選、防衝堂卡控、25 學分上限卡控、個人課表與成績單試算。
+
+教師端：授課清單檢視、學生平時/期中/期末成績登記與自動結算。
+
+管理員端 (Admin)：開課管理、開課人數與系所設定。
