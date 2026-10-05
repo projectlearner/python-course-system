@@ -1,0 +1,664 @@
+[
+{
+  "model": "course.category",
+  "pk": 4,
+  "fields": {
+    "name": "資訊管理系"
+  }
+},
+{
+  "model": "course.category",
+  "pk": 5,
+  "fields": {
+    "name": "財政稅務系"
+  }
+},
+{
+  "model": "course.category",
+  "pk": 6,
+  "fields": {
+    "name": "會計資訊系"
+  }
+},
+{
+  "model": "course.category",
+  "pk": 7,
+  "fields": {
+    "name": "財務金融系"
+  }
+},
+{
+  "model": "course.category",
+  "pk": 8,
+  "fields": {
+    "name": "國際貿易系"
+  }
+},
+{
+  "model": "course.category",
+  "pk": 9,
+  "fields": {
+    "name": "企業管理系"
+  }
+},
+{
+  "model": "course.category",
+  "pk": 10,
+  "fields": {
+    "name": "通識教育中心"
+  }
+},
+{
+  "model": "course.coursetime",
+  "pk": 28,
+  "fields": {
+    "course": 11,
+    "weekday": 1,
+    "period": 2
+  }
+},
+{
+  "model": "course.coursetime",
+  "pk": 29,
+  "fields": {
+    "course": 11,
+    "weekday": 1,
+    "period": 3
+  }
+},
+{
+  "model": "course.coursetime",
+  "pk": 30,
+  "fields": {
+    "course": 11,
+    "weekday": 1,
+    "period": 4
+  }
+},
+{
+  "model": "course.coursetime",
+  "pk": 31,
+  "fields": {
+    "course": 12,
+    "weekday": 2,
+    "period": 5
+  }
+},
+{
+  "model": "course.coursetime",
+  "pk": 32,
+  "fields": {
+    "course": 12,
+    "weekday": 2,
+    "period": 6
+  }
+},
+{
+  "model": "course.coursetime",
+  "pk": 33,
+  "fields": {
+    "course": 13,
+    "weekday": 3,
+    "period": 3
+  }
+},
+{
+  "model": "course.coursetime",
+  "pk": 34,
+  "fields": {
+    "course": 13,
+    "weekday": 3,
+    "period": 4
+  }
+},
+{
+  "model": "course.coursetime",
+  "pk": 35,
+  "fields": {
+    "course": 14,
+    "weekday": 3,
+    "period": 7
+  }
+},
+{
+  "model": "course.coursetime",
+  "pk": 36,
+  "fields": {
+    "course": 14,
+    "weekday": 3,
+    "period": 8
+  }
+},
+{
+  "model": "course.coursetime",
+  "pk": 37,
+  "fields": {
+    "course": 15,
+    "weekday": 4,
+    "period": 2
+  }
+},
+{
+  "model": "course.coursetime",
+  "pk": 38,
+  "fields": {
+    "course": 15,
+    "weekday": 4,
+    "period": 3
+  }
+},
+{
+  "model": "course.coursetime",
+  "pk": 39,
+  "fields": {
+    "course": 15,
+    "weekday": 4,
+    "period": 4
+  }
+},
+{
+  "model": "course.coursetime",
+  "pk": 40,
+  "fields": {
+    "course": 16,
+    "weekday": 4,
+    "period": 5
+  }
+},
+{
+  "model": "course.coursetime",
+  "pk": 41,
+  "fields": {
+    "course": 16,
+    "weekday": 4,
+    "period": 6
+  }
+},
+{
+  "model": "course.coursetime",
+  "pk": 42,
+  "fields": {
+    "course": 16,
+    "weekday": 4,
+    "period": 7
+  }
+},
+{
+  "model": "course.coursetime",
+  "pk": 43,
+  "fields": {
+    "course": 17,
+    "weekday": 4,
+    "period": 8
+  }
+},
+{
+  "model": "course.coursetime",
+  "pk": 44,
+  "fields": {
+    "course": 17,
+    "weekday": 4,
+    "period": 9
+  }
+},
+{
+  "model": "course.coursetime",
+  "pk": 45,
+  "fields": {
+    "course": 18,
+    "weekday": 5,
+    "period": 2
+  }
+},
+{
+  "model": "course.coursetime",
+  "pk": 46,
+  "fields": {
+    "course": 18,
+    "weekday": 5,
+    "period": 3
+  }
+},
+{
+  "model": "course.coursetime",
+  "pk": 47,
+  "fields": {
+    "course": 18,
+    "weekday": 5,
+    "period": 4
+  }
+},
+{
+  "model": "course.coursetime",
+  "pk": 48,
+  "fields": {
+    "course": 19,
+    "weekday": 5,
+    "period": 5
+  }
+},
+{
+  "model": "course.coursetime",
+  "pk": 49,
+  "fields": {
+    "course": 19,
+    "weekday": 5,
+    "period": 6
+  }
+},
+{
+  "model": "course.coursetime",
+  "pk": 50,
+  "fields": {
+    "course": 19,
+    "weekday": 5,
+    "period": 7
+  }
+},
+{
+  "model": "course.coursetime",
+  "pk": 52,
+  "fields": {
+    "course": 20,
+    "weekday": 2,
+    "period": 1
+  }
+},
+{
+  "model": "course.coursetime",
+  "pk": 53,
+  "fields": {
+    "course": 20,
+    "weekday": 2,
+    "period": 2
+  }
+},
+{
+  "model": "course.coursetime",
+  "pk": 54,
+  "fields": {
+    "course": 20,
+    "weekday": 2,
+    "period": 3
+  }
+},
+{
+  "model": "course.enrollment",
+  "pk": 32,
+  "fields": {
+    "course": 15,
+    "student": 3,
+    "enrolled_at": "2026-10-04T15:25:53.584Z",
+    "daily_score": null,
+    "midterm_score": null,
+    "final_score": null
+  }
+},
+{
+  "model": "course.enrollment",
+  "pk": 33,
+  "fields": {
+    "course": 16,
+    "student": 3,
+    "enrolled_at": "2026-10-04T15:25:55.439Z",
+    "daily_score": 60.0,
+    "midterm_score": 50.0,
+    "final_score": 90.0
+  }
+},
+{
+  "model": "course.enrollment",
+  "pk": 34,
+  "fields": {
+    "course": 17,
+    "student": 3,
+    "enrolled_at": "2026-10-04T15:25:58.750Z",
+    "daily_score": null,
+    "midterm_score": null,
+    "final_score": null
+  }
+},
+{
+  "model": "course.enrollment",
+  "pk": 35,
+  "fields": {
+    "course": 18,
+    "student": 3,
+    "enrolled_at": "2026-10-04T15:26:00.400Z",
+    "daily_score": null,
+    "midterm_score": null,
+    "final_score": null
+  }
+},
+{
+  "model": "course.enrollment",
+  "pk": 36,
+  "fields": {
+    "course": 19,
+    "student": 3,
+    "enrolled_at": "2026-10-04T15:26:01.733Z",
+    "daily_score": null,
+    "midterm_score": null,
+    "final_score": null
+  }
+},
+{
+  "model": "course.enrollment",
+  "pk": 37,
+  "fields": {
+    "course": 11,
+    "student": 3,
+    "enrolled_at": "2026-10-05T14:17:58.267Z",
+    "daily_score": null,
+    "midterm_score": null,
+    "final_score": null
+  }
+},
+{
+  "model": "course.enrollment",
+  "pk": 38,
+  "fields": {
+    "course": 12,
+    "student": 3,
+    "enrolled_at": "2026-10-05T14:35:13.156Z",
+    "daily_score": null,
+    "midterm_score": null,
+    "final_score": null
+  }
+},
+{
+  "model": "course.enrollment",
+  "pk": 40,
+  "fields": {
+    "course": 13,
+    "student": 3,
+    "enrolled_at": "2026-10-05T14:36:30.156Z",
+    "daily_score": null,
+    "midterm_score": null,
+    "final_score": null
+  }
+},
+{
+  "model": "course.course",
+  "pk": 11,
+  "fields": {
+    "title": "資訊網路",
+    "teacher": 8,
+    "classroom": "IM_LAB",
+    "description": "透過理論與實務並重的方式講解網路運作的原理。\r\n透過 Cisco 的封包模擬器 Packet Tracer 模擬網路環境的運作，\r\n讓同學能夠實踐知識。",
+    "capacity": 60,
+    "department": "IM",
+    "category": "REQUIRED",
+    "credits": 3,
+    "daily_weight": 40,
+    "midterm_weight": 30,
+    "final_weight": 30
+  }
+},
+{
+  "model": "course.course",
+  "pk": 12,
+  "fields": {
+    "title": "自然書寫與環境倫理關懷",
+    "teacher": 10,
+    "classroom": "BA_ROOM",
+    "description": "教學主題涵蓋：環境發展史、自然書寫作家及其作品、環境倫理學、觀察體驗等。",
+    "capacity": 60,
+    "department": "GEN",
+    "category": "GENERAL",
+    "credits": 2,
+    "daily_weight": 40,
+    "midterm_weight": 30,
+    "final_weight": 30
+  }
+},
+{
+  "model": "course.course",
+  "pk": 13,
+  "fields": {
+    "title": "撞球(上)",
+    "teacher": 9,
+    "classroom": "FIN_ROOM",
+    "description": "1.瞭解撞球運動的各種擊球技術。\r\n2.展現並提升正確的撞球基本技巧、擊球技術及競賽能力。\r\n3.瞭解撞球比賽規則及戰術運用。\r\n4.培養球場禮儀與運動風度\r\n5.能欣賞撞球比賽，觀摩他人表現\r\n6.能與人互動練習，建立團隊默契與規範",
+    "capacity": 60,
+    "department": "GEN",
+    "category": "GENERAL",
+    "credits": 2,
+    "daily_weight": 40,
+    "midterm_weight": 30,
+    "final_weight": 30
+  }
+},
+{
+  "model": "course.course",
+  "pk": 14,
+  "fields": {
+    "title": "英文(三)",
+    "teacher": 2,
+    "classroom": "CH_ROOM",
+    "description": "The course is designed to meet the academic needs of students by teaching them how to prepare for college-level materials. To further advance students’ \r\nlanguage skills, the course also offers an opportunity to use audio-visual supplements and out-of-class speaking and writing assignments. The course is \r\ndedicated to training all-round English learners by providing them the skills to succeed in using academic English.",
+    "capacity": 60,
+    "department": "GEN",
+    "category": "GENERAL",
+    "credits": 2,
+    "daily_weight": 40,
+    "midterm_weight": 30,
+    "final_weight": 30
+  }
+},
+{
+  "model": "course.course",
+  "pk": 15,
+  "fields": {
+    "title": "網站應用程式設計",
+    "teacher": 6,
+    "classroom": "AM_ROOM",
+    "description": "Python已經是目前最受歡迎的程式語言之一，而Django則是Python語言裡廣為使用的Web Framework之一。目前Django已經到5.0版，課程亦以該版本為主進行教學課程內容，包含\r\n1.快速學習建立一個入門的Django網站，如使用者登入、留言等等\r\n2.DjangoMVC(MTV)架構說明。網址對應、模板設計、Model和資料庫之間的關係等。\r\n3.網站開發技巧\r\n其它：繁中的Django的書目前有點少，但英文與線上的學習資源很多。\r\n課程內容預計是有學過Python、理解函式、物件撰寫、繼承、模組等程式撰寫。\r\n請務必留意修課學生要有學過基礎Python程式設計！課程內容以後端開發為主，前端頁面UI/UX的部分則比例較少\r\n\r\n期中與期末都是分組，在考試週展示網站內容與指定功能，並使用github連結繳交「原始程式碼」",
+    "capacity": 60,
+    "department": "IM",
+    "category": "ELECTIVE",
+    "credits": 3,
+    "daily_weight": 40,
+    "midterm_weight": 30,
+    "final_weight": 30
+  }
+},
+{
+  "model": "course.course",
+  "pk": 16,
+  "fields": {
+    "title": "資料庫管理",
+    "teacher": 5,
+    "classroom": "AM_ROOM",
+    "description": "One notebook per chapter. Start with this syllabus, then the introductory selections in Ch1, Ch2, and Ch5. The instructor sets stopping points; first-day programming is not required. GitHub displays saved outputs; use a Python 3 notebook with SQLite 3.39+ to run examples. Previous materials under revision are not assigned",
+    "capacity": 60,
+    "department": "IM",
+    "category": "REQUIRED",
+    "credits": 3,
+    "daily_weight": 40,
+    "midterm_weight": 30,
+    "final_weight": 30
+  }
+},
+{
+  "model": "course.course",
+  "pk": 17,
+  "fields": {
+    "title": "全民國防教育軍事訓練(二)-國防政策",
+    "teacher": 11,
+    "classroom": "EN_ROOM",
+    "description": "1.為建構學生正確的人生態度和全民國防基本素養，並於課程講述時以淺顯的故事敘述；並透過介紹相關史蹟、人生經驗或各項作品\r\n（如遊戲、影片、網站、書籍等），增添教學豐富性。\r\n2.使學生了解在國家安全有保障的前提下，我國才能永續發展，如莫拉克風災等災害發生時，全國各地「民敬軍、軍愛民」的舉動，\r\n  就是全民國防最好的詮釋。\r\n3.配合募兵制已於102年元月實施，介紹兵役實務與募兵制生涯規畫，增進學生對我國兵役制度的認識，提供學生更多元的選擇。\r\n4.為強化學生對國防政策與軍事戰略的關注，透過「國防故事館」經典案例說明，提升學習興趣。\r\n5.配合相關主題觀多媒體教學，以提升學習成效。\r\n6.利用網際網路設定主題，指導學生分組蒐集相關資料。\r\n7.培養學生主動學習，成為一種自主學習方式。",
+    "capacity": 60,
+    "department": "GEN",
+    "category": "GENERAL",
+    "credits": 2,
+    "daily_weight": 40,
+    "midterm_weight": 30,
+    "final_weight": 30
+  }
+},
+{
+  "model": "course.course",
+  "pk": 18,
+  "fields": {
+    "title": "資料結構",
+    "teacher": 4,
+    "classroom": "ACC_ROOM",
+    "description": "資料結構(data structures)是資訊相關科系(information relational departments)的核心科目.學習資料結構(data structures)的定義及其應用,其中必需知道電腦的資料架構及儲存方式,以使同學在未來電腦專業課程上有良好的基礎.資料結構(data structures)主要是在研究如何把原始的「資料」(data)，組織、安排、存放到電腦中的一門學問。對於節省儲存空間、增加資料的安全性與處理速度將有很大幫助，因此對於資料結構(data structures)的了解與否，關係到日後在軟、硬體發展上有彌足深遠的影響。 \r\n1. 資料結構(data structures)學什麼：介紹資料與資訊、演算法及其效率與估計。 \r\n2. 陣列(array)：介紹靜態結構型態、循序記憶體配置、多項式與矩陣。 \r\n3. 鏈結串列：(linked list)介紹動態結構型態(dynamic structure style)。 \r\n4. 堆疊與佇列：介紹堆疊(stack)、佇列(queue)。 \r\n5. 樹及二元樹：介紹樹的表示法、二元樹、引線樹、堆積與優先佇列。 \r\n6. 排序：介紹交換式排序、選擇式排序與各種排序法的時間及空間複雜度比較。 \r\n7. 搜尋資料：介紹循序搜尋、二元搜尋樹、AVL 樹。",
+    "capacity": 60,
+    "department": "IM",
+    "category": "REQUIRED",
+    "credits": 3,
+    "daily_weight": 40,
+    "midterm_weight": 30,
+    "final_weight": 30
+  }
+},
+{
+  "model": "course.course",
+  "pk": 19,
+  "fields": {
+    "title": "數位內容概論",
+    "teacher": 3,
+    "classroom": "IB_ROOM",
+    "description": "1.了解數位內容的本質，與顧客價值創造的意涵，避免數位行銷短視症。\r\n2.熟悉新數位內容的架構，並將其應用於個案整體策略規劃中。\r\n3.學習數位內容分析的方法與技術，並配合相關新媒體群眾募資提案。\r\n4.了解數位內容的程序及方法，有效導入品牌策略，強化內容製作並提升大學社會責任價值。",
+    "capacity": 60,
+    "department": "IM",
+    "category": "ELECTIVE",
+    "credits": 3,
+    "daily_weight": 40,
+    "midterm_weight": 30,
+    "final_weight": 30
+  }
+},
+{
+  "model": "course.course",
+  "pk": 20,
+  "fields": {
+    "title": "111",
+    "teacher": 2,
+    "classroom": "IM_LAB",
+    "description": "",
+    "capacity": 60,
+    "department": "IM",
+    "category": "REQUIRED",
+    "credits": 3,
+    "daily_weight": 40,
+    "midterm_weight": 30,
+    "final_weight": 30
+  }
+},
+{
+  "model": "users.studentprofile",
+  "pk": 3,
+  "fields": {
+    "user": 9,
+    "student_id": "114510",
+    "department": "IM",
+    "grade": 2,
+    "max_credits": 25
+  }
+},
+{
+  "model": "users.studentprofile",
+  "pk": 4,
+  "fields": {
+    "user": 10,
+    "student_id": "114511",
+    "department": "FIN",
+    "grade": 2,
+    "max_credits": 25
+  }
+},
+{
+  "model": "users.studentprofile",
+  "pk": 5,
+  "fields": {
+    "user": 8,
+    "student_id": "114512",
+    "department": "BA",
+    "grade": 2,
+    "max_credits": 25
+  }
+},
+{
+  "model": "users.teacherprofile",
+  "pk": 2,
+  "fields": {
+    "user": 4,
+    "department": "GEN"
+  }
+},
+{
+  "model": "users.teacherprofile",
+  "pk": 3,
+  "fields": {
+    "user": 6,
+    "department": "IM"
+  }
+},
+{
+  "model": "users.teacherprofile",
+  "pk": 4,
+  "fields": {
+    "user": 2,
+    "department": "IM"
+  }
+},
+{
+  "model": "users.teacherprofile",
+  "pk": 5,
+  "fields": {
+    "user": 5,
+    "department": "IM"
+  }
+},
+{
+  "model": "users.teacherprofile",
+  "pk": 6,
+  "fields": {
+    "user": 3,
+    "department": "IM"
+  }
+},
+{
+  "model": "users.teacherprofile",
+  "pk": 7,
+  "fields": {
+    "user": 7,
+    "department": "IM"
+  }
+},
+{
+  "model": "users.teacherprofile",
+  "pk": 8,
+  "fields": {
+    "user": 11,
+    "department": "IM"
+  }
+},
+{
+  "model": "users.teacherprofile",
+  "pk": 9,
+  "fields": {
+    "user": 12,
+    "department": "GEN"
+  }
+},
+{
+  "model": "users.teacherprofile",
+  "pk": 10,
+  "fields": {
+    "user": 13,
+    "department": "GEN"
+  }
+},
+{
+  "model": "users.teacherprofile",
+  "pk": 11,
+  "fields": {
+    "user": 14,
+    "department": "GEN"
+  }
+}
+]

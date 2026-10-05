@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="text-white">{{ course.name }} - 學生成績登記</h3>
+        <a href="{% url 'courses:teacher_courses' %}" class="btn btn-outline-secondary btn-sm">&laquo; 返回課程列表</a>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle border-secondary">
+                <thead>
+                    <tr>
+                        <th>學號</th>
+                        <th>姓名</th>
+                        <th>平時成績 ({{ course.daily_weight }}%)</th>
+                        <th>期中成績 ({{ course.midterm_weight }}%)</th>
+                        <th>期末成績 ({{ course.final_weight }}%)</th>
+                        <th>試算總成績</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for e in enrollments %}
+                    <tr>
+                        <td>{{ e.student.student_id }}</td>
+                        <td>{{ e.student.user.first_name }}{{ e.student.user.last_name }}</td>
+                        <td>
+                            <input type="number" step="0.1" min="0" max="100" name="daily_{{ e.id }}" value="{{ e.daily_score|default:'' }}" class="form-control form-control-sm bg-dark text-white border-secondary" placeholder="平時">
+                        </td>
+                        <td>
+                            <input type="number" step="0.1" min="0" max="100" name="midterm_{{ e.id }}" value="{{ e.midterm_score|default:'' }}" class="form-control form-control-sm bg-dark text-white border-secondary" placeholder="期中">
+                        </td>
+                        <td>
+                            <input type="number" step="0.1" min="0" max="100" name="final_{{ e.id }}" value="{{ e.final_score|default:'' }}" class="form-control form-control-sm bg-dark text-white border-secondary" placeholder="期末">
+                        </td>
+                        <td>
+                            {% if e.final_grade != None %}
+                                <span class="fw-bold {% if e.final_grade >= 60 %}text-success{% else %}text-danger{% endif %}">{{ e.final_grade }}</span>
+                            {% else %}
+                                <span class="text-muted">未結算</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">目前尚無學生選修此課程</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% if enrollments %}
+        <button type="submit" class="btn btn-primary mt-2">儲存成績變更</button>
+        {% endif %}
+    </form>
+</div>
+{% endblock %}

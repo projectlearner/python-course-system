@@ -11,10 +11,20 @@ DEPARTMENT_CHOICES = [
     ('GEN', '通識教育中心'),
 ]
 
+
 class StudentProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='student_profile')
     student_id = models.CharField(max_length=20, unique=True, verbose_name="學號")
     department = models.CharField(max_length=10, choices=DEPARTMENT_CHOICES, verbose_name="系所")
+
+    GRADE_CHOICES = [
+        (1, '大一'),
+        (2, '大二'),
+        (3, '大三'),
+        (4, '大四'),
+    ]
+    grade = models.IntegerField(choices=GRADE_CHOICES, default=2, verbose_name="年級")
+    max_credits = models.IntegerField(default=25, verbose_name="單學期學分上限")
 
     def __str__(self):
         return f"{self.student_id} - {self.user.username}"

@@ -3,9 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import transaction
-from .models import Course, Enrollment, CourseTime, DEPARTMENT_CHOICES, CATEGORY_CHOICES
-from django.views.decorators.http import require_POST
-from .utils import check_student_enrollment_permission
+from .models import Course, Enrollment, CourseTime, DEPARTMENT_CHOICES
 
 # 目前選課階段 (全域/動態設定預設值)
 CURRENT_PHASE = 2  # 可視需求修改為 1, 2, 3
@@ -123,7 +121,7 @@ def course_detail(request, course_id):
     }
     return render(request, 'courses/course_detail.html', context)
 
-
+@transaction.atomic
 @login_required
 def enroll_course(request, course_id):
     """加選課程邏輯"""
@@ -137,6 +135,17 @@ def enroll_course(request, course_id):
             return redirect('courses:course_detail', course_id=course.id)
             
         student = request.user.student_profile
+
+        # 1. 計算學生目前已選總學分
+        current_enrollments = Enrollment.objects.filter(student=student)
+        current_credits = sum(e.course.credits for e in current_enrollments)
+        
+        # 2. 檢查加選後是否會超過學分上限 (例如 25 學分)
+        if current_credits + course.credits > student.max_credits:
+            messages.error(request, f"加選失敗：超過單學期學分上限（目前 {current_credits} 學分 + 本課 {course.credits} 學分 > 上限 {student.max_credits} 學分）！")
+            return redirect('courses:course_list')
+
+
 
         # 2. 檢查選課階段與跨系權限（後端防呆第二防線）
         can_enroll, disabled_reason = check_course_permission(student, course, current_phase)
@@ -246,3 +255,47 @@ def drop_course(request, course_id):
         return redirect('courses:my_courses')
 
     return redirect('courses:my_courses')
+
+@login_required
+def teacher_courses(request):
+    """教師查看自己開的課程清單"""
+    # 簡單的身份擋板：確認是否有 teacher_profile
+    if not hasattr(request.user, 'teacher_profile'):
+        messages.error(request, "您沒有權限存取教師端系統！")
+        return redirect('courses:course_list')
+        
+    teacher = request.user.teacher_profile
+    courses = Course.objects.filter(teacher=teacher)
+    
+    return render(request, 'teacher_courses.html', {'courses': courses})
+
+
+@login_required
+def course_roster(request, course_id):
+    if not hasattr(request.user, 'teacher_profile'):
+        messages.error(request, "權限不足，您並非教師帳號！")
+        return redirect('courses:course_list')
+
+    course = get_object_or_404(Course, id=course_id, teacher=request.user.teacher_profile)
+    enrollments = Enrollment.objects.filter(course=course).select_related('student__user')
+
+    if request.method == 'POST':
+        for enrollment in enrollments:
+            daily = request.POST.get(f'daily_{enrollment.id}')
+            midterm = request.POST.get(f'midterm_{enrollment.id}')
+            final = request.POST.get(f'final_{enrollment.id}')
+
+            enrollment.daily_score = float(daily) if daily else None
+            enrollment.midterm_score = float(midterm) if midterm else None
+            enrollment.final_score = float(final) if final else None
+            enrollment.save()
+
+        # 關鍵點：改用 course.title，並使用正確帶前綴的 redirect
+        messages.success(request, f"已成功更新【{course.title}】的成績資料！")
+        return redirect('courses:course_roster', course_id=course.id)
+
+    context = {
+        'course': course,
+        'enrollments': enrollments,
+    }
+    return render(request, 'course_roster.html', context)

@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- 個人學業資訊卡片 -->
+    <div class="card bg-dark text-white border-secondary mb-4">
+        <div class="card-body">
+            <h3 class="card-title mb-3">
+                {{ student.user.first_name }}{{ student.user.last_name }} 的學業個人主頁
+            </h3>
+            <div class="row fs-5">
+                <div class="col-md-3">
+                    <strong>學號：</strong>{{ student.student_id }}
+                </div>
+                <!-- 關鍵 1：呼叫 get_department_display 取得中文系所 -->
+                <div class="col-md-3">
+                    <strong>系所：</strong>{{ student.get_department_display }}
+                </div>
+                <!-- 關鍵 2：呼叫 get_grade_display 取得年級中文 -->
+                <div class="col-md-3">
+                    <strong>年級：</strong>{{ student.get_grade_display }}
+                </div>
+                <div class="col-md-3">
+                    <strong>當期學分：</strong>
+                    <span class="badge {% if total_credits > student.max_credits %}bg-danger{% else %}bg-success{% endif %}">
+                        {{ total_credits }} / {{ student.max_credits }} 學分
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 修課與成績明細表格 -->
+    <h4 class="text-white mb-3">本學期修課與成績明細</h4>
+    <div class="table-responsive">
+        <table class="table table-dark table-hover align-middle border-secondary">
+            <thead>
+                <tr>
+                    <th>開課系所</th>
+                    <th>課程名稱</th>
+                    <th>學分</th>
+                    <th>平時成績 ({{ enrollment.course.daily_weight }}%)</th>
+                    <th>期中成績 ({{ enrollment.course.midterm_weight }}%)</th>
+                    <th>期末成績 ({{ enrollment.course.final_weight }}%)</th>
+                    <th>總成績</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for enrollment in enrollments %}
+                <tr>
+                    <!-- 關鍵 3：課程系所中文顯示 -->
+                    <td>
+                        <span class="badge bg-secondary">
+                            {{ enrollment.course.get_department_display }}
+                        </span>
+                    </td>
+
+                    <!-- 關鍵 4：課程名稱欄位是 title -->
+                    <td class="fw-bold">
+                        {{ enrollment.course.title }}
+                    </td>
+
+                    <td>{{ enrollment.course.credits }}</td>
+                    <td>{{ enrollment.daily_score|default:"--" }}</td>
+                    <td>{{ enrollment.midterm_score|default:"--" }}</td>
+                    <td>{{ enrollment.final_score|default:"--" }}</td>
+                    <td>
+                        {% if enrollment.final_grade != None %}
+                            <span class="fw-bold {% if enrollment.final_grade >= 60 %}text-success{% else %}text-danger{% endif %}">
+                                {{ enrollment.final_grade }}
+                            </span>
+                        {% else %}
+                            <span class="text-muted">未結算</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted">目前尚未選修任何課程</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
