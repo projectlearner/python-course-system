@@ -1,3 +1,4 @@
+import os
 """
 Django settings for myproject project.
 
@@ -20,12 +21,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-3+l3%%1%o3hc1)(uy4gnq1rg=83)&val%!rh$!4e8*&#1s^y(g'
-
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY',
+    'django-insecure-3+l3%%1%o3hc1)(uy4gnq1rg=83)&val%!rh$!4e8*&#1s^y(g'
+)
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -43,6 +46,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -130,3 +134,6 @@ MAILERS = {
 
 LOGIN_REDIRECT_URL = '/'      # 登入成功後自動回首頁
 LOGOUT_REDIRECT_URL = '/'     # 登出成功後自動回首頁
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
