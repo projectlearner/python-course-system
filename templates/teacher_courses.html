@@ -1,35 +1,37 @@
 {% extends 'base.html' %}
 
-{% block content %}
-<div class="container mt-4">
-    <h2 class="text-white mb-4">授課教師管理端 - 我的開課清單</h2>
+{% block title %}授課管理 - 選課系統{% endblock %}
 
-    <div class="row">
+{% block content %}
+<div class="container-fluid p-0">
+    <h3 class="fw-bold text-dark mb-4">👨‍🏫 我的授課清單</h3>
+
+    <div class="row row-cols-1 row-cols-md-2 g-4">
         {% for course in courses %}
-        <div class="col-md-6 mb-4">
-            <div class="card bg-dark text-white border-secondary h-100">
-                <div class="card-body d-flex flex-column justify-content-between">
-                    <div>
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="badge bg-primary">
-                                {{ course.get_department_display }}
-                            </span>
-                            <span class="text-muted">學分：{{ course.credits }}</span>
-                        </div>
-                        
-                        <!-- 關鍵點：課程名稱欄位是 title -->
-                        <h4 class="card-title text-info mb-3">{{ course.title }}</h4>
-                        
-                        <p class="card-text text-light">
-                            <strong>上課教室：</strong>{{ course.get_classroom_display }}<br>
-                            <strong>選課人數：</strong>{{ course.enrollments.count }} / {{ course.capacity }} 人
-                        </p>
+        <div class="col">
+            <div class="card card-custom h-100 p-3">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="badge bg-secondary">{{ course.get_department_display }}</span>
+                        <span class="badge bg-info text-dark fw-bold">{{ course.credits }} 學分</span>
                     </div>
 
-                    <div class="mt-3">
-                        <!-- 帶有命名空間的 course_roster 路由 -->
-                        <a href="{% url 'courses:course_roster' course.id %}" class="btn btn-outline-info w-100">
-                            管理學生成績
+                    <h4 class="fw-bold text-dark mt-1">{{ course.title }}</h4>
+                    <p class="text-secondary small mb-3">
+                        <strong>教室：</strong>{{ course.get_classroom_display }} |
+                        <strong>限額：</strong>{{ course.capacity }} 人
+                    </p>
+
+                    <p class="text-muted small flex-grow-1">
+                        {{ course.description|default:"尚無簡介內容。"|truncatechars:80 }}
+                    </p>
+
+                    <div class="pt-3 border-top d-flex gap-2">
+                        <a href="{% url 'courses:course_roster' course.id %}" class="btn btn-primary btn-sm w-100 fw-bold">
+                            📝 登記學生成績
+                        </a>
+                        <a href="{% url 'courses:edit_course' course.id %}" class="btn btn-outline-secondary btn-sm w-100 fw-bold">
+                            ✏️ 編輯課程資訊
                         </a>
                     </div>
                 </div>
@@ -37,9 +39,7 @@
         </div>
         {% empty %}
         <div class="col-12">
-            <div class="alert alert-secondary text-center" role="alert">
-                目前尚無指派給您的授課課程。
-            </div>
+            <div class="alert alert-secondary text-center">目前無教授任何課程。</div>
         </div>
         {% endfor %}
     </div>

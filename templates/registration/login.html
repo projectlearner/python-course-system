@@ -1,33 +1,101 @@
 {% extends 'base.html' %}
 
-{% block content %}
-<div class="row justify-content-center mt-5">
-    <div class="col-md-4">
-        <div class="card bg-dark text-light border-secondary">
-            <div class="card-header border-secondary text-center">
-                <h3>學生/使用者登入</h3>
-            </div>
-            <div class="card-body">
-                {% if form.errors %}
-                    <div class="alert alert-danger">
-                        帳號或密碼錯誤，請重新輸入。
-                    </div>
-                {% endif %}
+{% block title %}系統登入 - 選課系統{% endblock %}
 
-                <form method="post" action="{% url 'login' %}">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="id_username" class="form-label">帳號 (Username)</label>
-                        <input type="text" name="username" class="form-control bg-secondary text-light border-0" id="id_username" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="id_password" class="form-label">密碼 (Password)</label>
-                        <input type="password" name="password" class="form-control bg-secondary text-light border-0" id="id_password" required>
-                    </div>
-                    <input type="hidden" name="next" value="{{ next }}" />
-                    <button type="submit" class="btn btn-primary w-100">登入</button>
-                </form>
-            </div>
+{% block content %}
+<style>
+    /* 滑入動畫定義 */
+    @keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-40px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(40px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .split-container {
+        min-height: 85vh;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .left-brand {
+        background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+        color: #FFFFFF;
+        animation: slideInLeft 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .right-form {
+        background-color: #FFFFFF;
+        animation: slideInRight 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .copyright-text {
+        color: #94A3B8 !important;
+    }
+
+    .form-control:focus {
+        border-color: #3B82F6;
+        box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.25);
+    }
+</style>
+
+<div class="row g-0 split-container my-auto">
+    <div class="col-lg-6 left-brand p-5 d-flex flex-column justify-content-between">
+        <div>
+            <h2 class="fw-bold mb-3">🎓 國立臺北商業大學</h2>
+            <h4 class="text-light opacity-75">教務資訊與線上選課系統</h4>
+        </div>
+        <div class="my-4">
+            <h6 class="text-uppercase text-warning fw-bold mb-3">📢 選課注意事項</h6>
+            <ul class="list-unstyled text-light opacity-75 lh-lg small">
+                <li>• 第一階段開放系所專業必修選修登記。</li>
+                <li>• 第二階段開放通識與跨系選修課程。</li>
+                <li>• 選課系統採用悲觀鎖機制，確保名額即時卡控。</li>
+                <li>• 單學期預設最高學分限制為 25 學分。</li>
+            </ul>
+        </div>
+        <small class="copyright-text">© 113 學年度資訊管理系 系統展示版</small>
+    </div>
+
+    <div class="col-lg-6 right-form p-5 d-flex align-items-center">
+        <div class="w-100">
+            <h3 class="fw-bold text-dark mb-4">帳號登入</h3>
+            
+            {% if form.errors %}
+                <div class="alert alert-danger py-2 small" role="alert">
+                    學號/教職員號碼或密碼錯誤，請重新確認。
+                </div>
+            {% endif %}
+
+            <form method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="id_username" class="form-label fw-semibold text-secondary">學號 / 教職員代號</label>
+                    <input type="text" name="username" class="form-control form-control-lg bg-light" id="id_username" placeholder="請輸入帳號" required autofocus>
+                </div>
+                <div class="mb-4">
+                    <label for="id_password" class="form-label fw-semibold text-secondary">密碼</label>
+                    <input type="password" name="password" class="form-control form-control-lg bg-light" id="id_password" placeholder="請輸入密碼" required>
+                </div>
+                <input type="hidden" name="next" value="{{ next }}" />
+                <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold shadow-sm">立即登入</button>
+            </form>
         </div>
     </div>
 </div>

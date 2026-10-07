@@ -1,50 +1,69 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ course.title }}{% endblock %}
+{% block title %}課程詳情 - {{ course.title }}{% endblock %}
 
 {% block content %}
-<div class="card">
-    <div class="card-body">
-        <h2>{{ course.title }}</h2>
-        <p class="badge bg-secondary">{{ course.get_category_display }}</p>
-        <hr>
-        
-        <p><strong>說明：</strong>{{ course.description }}</p>
+<div class="container my-4">
+    <div class="card card-custom p-4 shadow-sm">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+                <span class="badge bg-secondary me-1">{{ course.get_department_display }}</span>
+                <span class="badge {% if course.category == 'REQUIRED' %}bg-danger{% elif course.category == 'ELECTIVE' %}bg-primary{% else %}bg-success{% endif %}">
+                    {{ course.get_category_display }}
+                </span>
+                <h2 class="fw-bold text-dark mt-2 mb-0">{{ course.title }}</h2>
+            </div>
+            <span class="badge bg-info text-dark fs-6">{{ course.credits }} 學分</span>
+        </div>
 
-        <p><strong>授課教師：</strong>{{ course.teacher.name|default:"尚未指定" }}</p>
-        <p><strong>上課地點：</strong>{{ course.get_classroom_display|default:"未定" }}</p>
-        <p><strong>上課時間：</strong>
-            {% for time in course.times.all %}
-                <span class="badge bg-info text-dark">週{{ time.weekday }} 第{{ time.period }}節</span>
-            {% empty %}
-                <span class="text-muted">尚無排課時間</span>
-            {% endfor %}
-        </p>
-        
         <hr>
 
-        {% if user.is_authenticated %}
-            {% if is_enrolled %}
-                <!-- 1. 已加選狀態 -->
-                <button class="btn btn-success btn-lg" disabled>✓ 已在課表中</button>
-            {% elif can_enroll %}
-                <!-- 2. 符合條件：顯示加選按鈕 -->
-                <form action="{% url 'courses:enroll_course' course.id %}" method="post" class="d-inline">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-primary btn-lg">立即加選</button>
-                </form>
-            {% else %}
-                <!-- 3. 不符合條件：僅顯示置灰按鈕與原因 -->
-                <button class="btn btn-secondary btn-lg" disabled>無法加選</button>
-                {% if disabled_reason %}
-                    <div class="text-danger small mt-2">
-                        * {{ disabled_reason }}
-                    </div>
+        <div class="row g-3 fs-6 mb-4">
+            <div class="col-md-6">
+                <strong>授課教師：</strong>{{ course.teacher.name|default:"未定" }}
+            </div>
+            <div class="col-md-6">
+                <strong>上課教室：</strong>{{ course.get_classroom_display }}
+            </div>
+            <div class="col-md-12">
+                <strong>上課時間：</strong>
+                {% for time in course.times.all %}
+                    <span class="badge bg-light text-dark border me-1">週{{ time.weekday }} 第 {{ time.period }} 節</span>
+                {% empty %}
+                    <span class="text-muted">未排定時間</span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <h5 class="fw-bold">課程簡介</h5>
+            <p class="text-secondary">{{ course.description|default:"尚無課程簡介資料。" }}</p>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+            <a href="{% url 'courses:course_list' %}" class="btn btn-outline-secondary">← 返回課程清單</a>
+
+            {% if user.is_authenticated %}
+                {% if is_teacher %}
+                    <button class="btn btn-secondary" disabled>教師身份無法選課</button>
+                {% elif is_enrolled %}
+                    <form action="{% url 'courses:drop_course' course.id %}" method="post" class="m-0">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('確定要退選這門課程嗎？');">退選此課程</button>
+                    </form>
+                {% elif can_enroll %}
+                    <form action="{% url 'courses:enroll_course' course.id %}" method="post" class="m-0">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">立即加選</button>
+                    </form>
+                {% else %}
+                    <button class="btn btn-secondary" disabled>{{ disabled_reason }}</button>
                 {% endif %}
+            {% else %}
+                <!-- 修正這裡的連結：指向一般學生/教師登入頁，而非 admin 管理員登入 -->
+                <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-primary">請先登入系統以進行選課</a>
             {% endif %}
-        {% else %}
-            <a href="/admin/login/?next={{ request.path }}" class="btn btn-warning">登入後即可選課</a>
-        {% endif %}
+        </div>
     </div>
 </div>
 {% endblock %}

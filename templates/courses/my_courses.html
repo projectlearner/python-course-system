@@ -1,176 +1,73 @@
 {% extends 'base.html' %}
 
+{% block title %}我的課表 - 選課系統{% endblock %}
+
 {% block content %}
 <style>
-    /* 列印專用樣式 */
-    @media print {       
-        .no-print, nav, .btn, footer {
-            display: none !important;
+    @media print {
+        body * {
+            visibility: hidden;
         }
-        /* body {
-            background-color: #fff !important;
-            color: #000 !important;
+        #printable-timetable, #printable-timetable * {
+            visibility: visible;
         }
-        .card {
-            border: none !important;
-        }
-        .table-bordered th, .table-bordered td {
-            border: 1px solid #000 !important;
-            color: #000 !important;
-        } */
-        .navbar, .btn, footer, .popover {
-                display: none !important;
-            }
-
-        .badge.bg-primary {
-            background-color: transparent !important;
-            color: #000 !important;
-            border: none !important;
-            box-shadow: none !important;
-            padding: 0 !important;
-        }
-
-        .table td, .table th {
-            padding: 6px !important;
-            font-size: 13px;
-        }
-
-        .print-detail {
-            font-weight: normal;
-            color: #444;
+        #printable-timetable {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
         }
     }
 </style>
 
-<div class="container my-4">
-    <div class="d-flex justify-content-between align-items-center mb-4 no-print">
-        <h2>我的課表</h2>
-        <button onclick="window.print()" class="btn btn-outline-info">
-            🖨️ 列印/儲存課表 (PDF)
-        </button>
+<div class="d-flex justify-content-between align-items-center mb-4 no-print">
+    <h3 class="fw-bold text-dark mb-0">📅 個人課表</h3>
+    <button onclick="window.print()" class="btn btn-outline-primary fw-bold">
+        <i class="bi bi-printer"></i> 列印 / 儲存課表 PDF
+    </button>
+</div>
+
+<div class="card card-custom p-4" id="printable-timetable">
+    <div class="text-center mb-3 d-none d-print-block">
+        <h2 class="fw-bold">國立臺北商業大學 學生個人課表</h2>
+        <p class="mb-0">學生姓名：{{ request.user.student_profile.user.last_name }}{{ request.user.student_profile.user.first_name }} | 學號：{{ request.user.student_profile.student_id }}</p>
     </div>
 
-    <!-- 視覺化週課表 -->
-    <div class="card bg-dark text-light border-secondary mb-4">
-        <div class="card-header border-secondary">
-            <h5 class="mb-0">每周時間表</h5>
-        </div>
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-bordered text-center" style="table-layout: fixed; width: 100%;">
-                    <thead>
-                        <tr>
-                            <th style="width: 12%;">節次 / 星期</th>
-                            <th style="width: 12.5%;">週一</th>
-                            <th style="width: 12.5%;">週二</th>
-                            <th style="width: 12.5%;">週三</th>
-                            <th style="width: 12.5%;">週四</th>
-                            <th style="width: 12.5%;">週五</th>
-                            <th style="width: 12.5%;">週六</th>
-                            <th style="width: 12.5%;">週日</th>
-                        </tr>
-                    </thead>                    
-                    <tbody>
-                        {% for period_num, time_str, days_slots in grid %}
-                        <tr>
-                            <th class="table-light align-middle">
-                                第 {{ period_num }} 節<br>
-                                <small class="text-muted fw-normal">{{ time_str }}</small>
-                            </th>
-                            {% for slots in days_slots %}
-                            <td class="align-middle">
-                                {% for time_slot in slots %}
-                                    <a href="{% url 'courses:course_detail' time_slot.course.id %}" 
-                                    class="badge bg-primary text-wrap text-decoration-none mb-1 p-2 d-block course-popover" 
-                                    data-bs-toggle="popover" 
-                                    data-bs-trigger="hover focus" 
-                                    data-bs-html="true" 
-                                    data-bs-title="<strong>{{ time_slot.course.title }}</strong>" 
-                                    data-bs-content="
-                                        <strong>授課教師：</strong>{% if time_slot.course.teacher %}{{ time_slot.course.teacher.name|default:time_slot.course.teacher.user.username }}{% else %}未定{% endif %}<br>
-                                        <strong>上課地點：</strong>{{ time_slot.course.get_classroom_display }}<br>
-                                        <strong>上課時間：</strong>週{{ time_slot.weekday }} 第{{ time_slot.period }}節
-                                    ">
-                                        <!-- 螢幕與列印都會顯示的課程名稱 -->
-                                        <div class="fw-bold">{{ time_slot.course.title }}</div>
-                                        
-                                        <!-- 只在列印時顯示的細節 (螢幕上會隱藏，不影響平時視覺) -->
-                                        <div class="d-none d-print-block print-detail mt-1">
-                                            <small>
-                                                {% if time_slot.course.teacher %}{{ time_slot.course.teacher.name|default:time_slot.course.teacher.user.username }}
-                                                    {% else %}未定
-                                                {% endif %}
-                                                <br>
-                                                {{ time_slot.course.get_classroom_display }}
-                                            </small>
-                                        </div>
-                                    </a>
-                                {% empty %}
-                                    <span class="text-muted">-</span>
-                                {% endfor %}                                                                
-                            </td>
-                            {% endfor %}
-                        </tr>
+    <div class="table-responsive">
+        <table class="table table-bordered text-center align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th style="width: 10%;">節次 / 時間</th>
+                    <th style="width: 12.8%;">週一</th>
+                    <th style="width: 12.8%;">週二</th>
+                    <th style="width: 12.8%;">週三</th>
+                    <th style="width: 12.8%;">週四</th>
+                    <th style="width: 12.8%;">週五</th>
+                    <th style="width: 12.8%;">週六</th>
+                    <th style="width: 12.8%;">週日</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for period, time_str, days in grid %}
+                <tr>
+                    <td class="table-light fw-bold small">
+                        第 {{ period }} 節<br>
+                        <span class="text-muted fw-normal" style="font-size: 0.75rem;">{{ time_str }}</span>
+                    </td>
+                    {% for cell in days %}
+                    <td class="p-1">
+                        {% for slot in cell %}
+                            <div class="p-2 rounded bg-primary bg-opacity-10 text-primary border border-primary small fw-bold mb-1">
+                                {{ slot.course.title }}<br>
+                                <span class="text-secondary fw-normal">{{ slot.course.get_classroom_display }}</span>
+                            </div>
                         {% endfor %}
-                    </tbody>
-                </table>                
-            </div>
-        </div>
-    </div>
-
-    <!-- 原有清單模式（附帶退選按鈕，列印時自動隱藏） -->
-    <div class="card bg-dark text-light border-secondary no-print">
-        <div class="card-header border-secondary">
-            <h5 class="mb-0">已加選課程清單</h5>
-        </div>
-        <div class="card-body">
-            <table class="table table-dark table-striped align-middle">
-                <thead>
-                    <tr>
-                        <th>課程名稱</th>
-                        <th>上課地點</th>
-                        <th>授課教師</th>
-                        <th>上課時間</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for enrollment in enrollments %}
-                        <tr>
-                            <td>{{ enrollment.course.title }}</td>
-                            <td>{{ enrollment.course.get_classroom_display }}</td>
-                            <td>{{ enrollment.course.teacher.user.username|default:"尚未指定" }}</td>
-                            <td>
-                                {% for time in enrollment.course.times.all %}
-                                    <span class="badge bg-secondary">週{{ time.weekday }} 第{{ time.period }}節</span>
-                                {% empty %}
-                                    <span class="text-muted">未排課</span>
-                                {% endfor %}
-                            </td>
-                            <td>
-                                <form action="{% url 'courses:drop_course' enrollment.course.id %}" method="post" class="d-inline">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-outline-danger btn-sm" onclick="return confirm('確定要退選這門課程嗎？')">退選</button>
-                                </form>
-                            </td>
-                        </tr>
-                    {% empty %}
-                        <tr>
-                            <td colspan="5" class="text-center text-muted">目前尚未加選任何課程。</td>
-                        </tr>
+                    </td>
                     {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // 初始化頁面上所有的 Popover
-        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
-        var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-            return new bootstrap.Popover(popoverTriggerEl);
-        });
-    });
-</script>
 {% endblock %}

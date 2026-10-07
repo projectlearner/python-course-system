@@ -1,51 +1,426 @@
 [
 {
+  "model": "auth.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$dummy$passwordhash",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "teacher_2",
+    "first_name": "",
+    "last_name": "",
+    "email": "teacher2@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-01T00:00:00Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$dummy$passwordhash",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "teacher_3",
+    "first_name": "",
+    "last_name": "",
+    "email": "teacher3@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-01T00:00:00Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$dummy$passwordhash",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "teacher_4",
+    "first_name": "",
+    "last_name": "",
+    "email": "teacher4@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-01T00:00:00Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$dummy$passwordhash",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "teacher_5",
+    "first_name": "",
+    "last_name": "",
+    "email": "teacher5@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-01T00:00:00Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$dummy$passwordhash",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "teacher_6",
+    "first_name": "",
+    "last_name": "",
+    "email": "teacher6@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-01T00:00:00Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 7,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$dummy$passwordhash",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "teacher_7",
+    "first_name": "",
+    "last_name": "",
+    "email": "teacher7@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-01T00:00:00Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 8,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$dummy$passwordhash",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "student_114512",
+    "first_name": "",
+    "last_name": "",
+    "email": "student8@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-01T00:00:00Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 9,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$aiV9bHdnam2CGkv1qyfXRq$tY5HxoecTtHIu2a+5oTm7InhMj1Rcg0NDDbqmOAVRIo=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "student_114510",
+    "first_name": "ä»¥ç¿”",
+    "last_name": "ç‹",
+    "email": "student9@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-01T00:00:00Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 10,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$dummy$passwordhash",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "student_114511",
+    "first_name": "",
+    "last_name": "",
+    "email": "student10@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-01T00:00:00Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 11,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$dummy$passwordhash",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "teacher_11",
+    "first_name": "",
+    "last_name": "",
+    "email": "teacher11@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-01T00:00:00Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 12,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$dummy$passwordhash",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "teacher_12",
+    "first_name": "",
+    "last_name": "",
+    "email": "teacher12@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-01T00:00:00Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 13,
+  "fields": {
+    "password": "pbkdf2_sha256$600000$dummy$passwordhash",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "teacher_13",
+    "first_name": "",
+    "last_name": "",
+    "email": "teacher13@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-01T00:00:00Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 14,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$bgWmisXij97cHaD1WfFrIE$nMcMNPOzFeRKGCFqd9+Goc7GE3LveGObXKx4cCcHGwI=",
+    "last_login": "2026-10-06T13:14:44.545Z",
+    "is_superuser": false,
+    "username": "teacher_14",
+    "first_name": "",
+    "last_name": "",
+    "email": "teacher14@example.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-01-01T00:00:00Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 15,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$m7wZ2b3vWVdJs7pFm38Nu1$BFDASZQiVB1Gb/Ps5qG+GytC7qVjhu7Mopvi48yjlDQ=",
+    "last_login": "2026-10-06T13:08:13.905Z",
+    "is_superuser": true,
+    "username": "WangWei",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-10-06T13:08:08.549Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.studentprofile",
+  "pk": 3,
+  "fields": {
+    "user": 9,
+    "student_id": "114510",
+    "department": "IM",
+    "grade": 2,
+    "max_credits": 25
+  }
+},
+{
+  "model": "users.studentprofile",
+  "pk": 4,
+  "fields": {
+    "user": 10,
+    "student_id": "114511",
+    "department": "FIN",
+    "grade": 2,
+    "max_credits": 25
+  }
+},
+{
+  "model": "users.studentprofile",
+  "pk": 5,
+  "fields": {
+    "user": 8,
+    "student_id": "114512",
+    "department": "BA",
+    "grade": 2,
+    "max_credits": 25
+  }
+},
+{
+  "model": "users.teacherprofile",
+  "pk": 2,
+  "fields": {
+    "user": 4,
+    "teacher_id": "T001",
+    "department": "GEN"
+  }
+},
+{
+  "model": "users.teacherprofile",
+  "pk": 3,
+  "fields": {
+    "user": 6,
+    "teacher_id": "T002",
+    "department": "IM"
+  }
+},
+{
+  "model": "users.teacherprofile",
+  "pk": 4,
+  "fields": {
+    "user": 2,
+    "teacher_id": "T003",
+    "department": "IM"
+  }
+},
+{
+  "model": "users.teacherprofile",
+  "pk": 5,
+  "fields": {
+    "user": 5,
+    "teacher_id": "T004",
+    "department": "IM"
+  }
+},
+{
+  "model": "users.teacherprofile",
+  "pk": 6,
+  "fields": {
+    "user": 3,
+    "teacher_id": "T005",
+    "department": "IM"
+  }
+},
+{
+  "model": "users.teacherprofile",
+  "pk": 7,
+  "fields": {
+    "user": 7,
+    "teacher_id": "T006",
+    "department": "IM"
+  }
+},
+{
+  "model": "users.teacherprofile",
+  "pk": 8,
+  "fields": {
+    "user": 11,
+    "teacher_id": "T007",
+    "department": "IM"
+  }
+},
+{
+  "model": "users.teacherprofile",
+  "pk": 9,
+  "fields": {
+    "user": 12,
+    "teacher_id": "T008",
+    "department": "GEN"
+  }
+},
+{
+  "model": "users.teacherprofile",
+  "pk": 10,
+  "fields": {
+    "user": 13,
+    "teacher_id": "T009",
+    "department": "GEN"
+  }
+},
+{
+  "model": "users.teacherprofile",
+  "pk": 11,
+  "fields": {
+    "user": 14,
+    "teacher_id": "T010",
+    "department": "GEN"
+  }
+},
+{
   "model": "course.category",
   "pk": 4,
   "fields": {
-    "name": "¸ê°TºŞ²z¨t"
+    "name": "è³‡è¨Šç®¡ç†ç³»"
   }
 },
 {
   "model": "course.category",
   "pk": 5,
   "fields": {
-    "name": "°]¬Fµ|°È¨t"
+    "name": "è²¡æ”¿ç¨…å‹™ç³»"
   }
 },
 {
   "model": "course.category",
   "pk": 6,
   "fields": {
-    "name": "·|­p¸ê°T¨t"
+    "name": "æœƒè¨ˆè³‡è¨Šç³»"
   }
 },
 {
   "model": "course.category",
   "pk": 7,
   "fields": {
-    "name": "°]°Èª÷¿Ä¨t"
+    "name": "è²¡å‹™é‡‘èç³»"
   }
 },
 {
   "model": "course.category",
   "pk": 8,
   "fields": {
-    "name": "°ê»Ú¶T©ö¨t"
+    "name": "åœ‹éš›è²¿æ˜“ç³»"
   }
 },
 {
   "model": "course.category",
   "pk": 9,
   "fields": {
-    "name": "¥ø·~ºŞ²z¨t"
+    "name": "ä¼æ¥­ç®¡ç†ç³»"
   }
 },
 {
   "model": "course.category",
   "pk": 10,
   "fields": {
-    "name": "³qÃÑ±Ğ¨|¤¤¤ß"
+    "name": "é€šè­˜æ•™è‚²ä¸­å¿ƒ"
   }
 },
 {
@@ -313,9 +688,9 @@
     "course": 17,
     "student": 3,
     "enrolled_at": "2026-10-04T15:25:58.750Z",
-    "daily_score": null,
-    "midterm_score": null,
-    "final_score": null
+    "daily_score": 60.0,
+    "midterm_score": 60.0,
+    "final_score": 60.0
   }
 },
 {
@@ -379,13 +754,25 @@
   }
 },
 {
+  "model": "course.enrollment",
+  "pk": 41,
+  "fields": {
+    "course": 14,
+    "student": 3,
+    "enrolled_at": "2026-10-06T13:12:37.317Z",
+    "daily_score": null,
+    "midterm_score": null,
+    "final_score": null
+  }
+},
+{
   "model": "course.course",
   "pk": 11,
   "fields": {
-    "title": "¸ê°Tºô¸ô",
+    "title": "è³‡è¨Šç¶²è·¯",
     "teacher": 8,
     "classroom": "IM_LAB",
-    "description": "³z¹L²z½×»P¹ê°È¨Ã­«ªº¤è¦¡Á¿¸Ñºô¸ô¹B§@ªº­ì²z¡C\r\n³z¹L Cisco ªº«Ê¥]¼ÒÀÀ¾¹ Packet Tracer ¼ÒÀÀºô¸ôÀô¹Òªº¹B§@¡A\r\nÅı¦P¾Ç¯à°÷¹ê½îª¾ÃÑ¡C",
+    "description": "é€éç†è«–èˆ‡å¯¦å‹™ä¸¦é‡çš„æ–¹å¼è¬›è§£ç¶²è·¯é‹ä½œçš„åŸç†ã€‚\r\né€é Cisco çš„å°åŒ…æ¨¡æ“¬å™¨ Packet Tracer æ¨¡æ“¬ç¶²è·¯ç’°å¢ƒçš„é‹ä½œï¼Œ\r\nè®“åŒå­¸èƒ½å¤ å¯¦è¸çŸ¥è­˜ã€‚",
     "capacity": 60,
     "department": "IM",
     "category": "REQUIRED",
@@ -399,10 +786,10 @@
   "model": "course.course",
   "pk": 12,
   "fields": {
-    "title": "¦ÛµM®Ñ¼g»PÀô¹Ò­Û²zÃöÃh",
+    "title": "è‡ªç„¶æ›¸å¯«èˆ‡ç’°å¢ƒå€«ç†é—œæ‡·",
     "teacher": 10,
     "classroom": "BA_ROOM",
-    "description": "±Ğ¾Ç¥DÃD²[»\¡GÀô¹Òµo®i¥v¡B¦ÛµM®Ñ¼g§@®a¤Î¨ä§@«~¡BÀô¹Ò­Û²z¾Ç¡BÆ[¹îÅéÅçµ¥¡C",
+    "description": "æ•™å­¸ä¸»é¡Œæ¶µè“‹ï¼šç’°å¢ƒç™¼å±•å²ã€è‡ªç„¶æ›¸å¯«ä½œå®¶åŠå…¶ä½œå“ã€ç’°å¢ƒå€«ç†å­¸ã€è§€å¯Ÿé«”é©—ç­‰ã€‚",
     "capacity": 60,
     "department": "GEN",
     "category": "GENERAL",
@@ -416,10 +803,10 @@
   "model": "course.course",
   "pk": 13,
   "fields": {
-    "title": "¼²²y(¤W)",
+    "title": "æ’çƒ(ä¸Š)",
     "teacher": 9,
     "classroom": "FIN_ROOM",
-    "description": "1.ÁA¸Ñ¼²²y¹B°Êªº¦UºØÀ»²y§Ş³N¡C\r\n2.®i²{¨Ã´£¤É¥¿½Tªº¼²²y°ò¥»§Ş¥©¡BÀ»²y§Ş³N¤ÎÄvÁÉ¯à¤O¡C\r\n3.ÁA¸Ñ¼²²y¤ñÁÉ³W«h¤Î¾Ô³N¹B¥Î¡C\r\n4.°ö¾i²y³õÂ§»ö»P¹B°Ê­·«×\r\n5.¯àªY½à¼²²y¤ñÁÉ¡AÆ[¼¯¥L¤Hªí²{\r\n6.¯à»P¤H¤¬°Ê½m²ß¡A«Ø¥ß¹Î¶¤Àq«´»P³W½d",
+    "description": "1.ç­è§£æ’çƒé‹å‹•çš„å„ç¨®æ“ŠçƒæŠ€è¡“ã€‚\r\n2.å±•ç¾ä¸¦æå‡æ­£ç¢ºçš„æ’çƒåŸºæœ¬æŠ€å·§ã€æ“ŠçƒæŠ€è¡“åŠç«¶è³½èƒ½åŠ›ã€‚\r\n3.ç­è§£æ’çƒæ¯”è³½è¦å‰‡åŠæˆ°è¡“é‹ç”¨ã€‚\r\n4.åŸ¹é¤Šçƒå ´ç¦®å„€èˆ‡é‹å‹•é¢¨åº¦\r\n5.èƒ½æ¬£è³æ’çƒæ¯”è³½ï¼Œè§€æ‘©ä»–äººè¡¨ç¾\r\n6.èƒ½èˆ‡äººäº’å‹•ç·´ç¿’ï¼Œå»ºç«‹åœ˜éšŠé»˜å¥‘èˆ‡è¦ç¯„",
     "capacity": 60,
     "department": "GEN",
     "category": "GENERAL",
@@ -433,10 +820,10 @@
   "model": "course.course",
   "pk": 14,
   "fields": {
-    "title": "­^¤å(¤T)",
+    "title": "è‹±æ–‡(ä¸‰)",
     "teacher": 2,
     "classroom": "CH_ROOM",
-    "description": "The course is designed to meet the academic needs of students by teaching them how to prepare for college-level materials. To further advance students¡¦ \r\nlanguage skills, the course also offers an opportunity to use audio-visual supplements and out-of-class speaking and writing assignments. The course is \r\ndedicated to training all-round English learners by providing them the skills to succeed in using academic English.",
+    "description": "The course is designed to meet the academic needs of students by teaching them how to prepare for college-level materials. To further advance studentsâ€™ \r\nlanguage skills, the course also offers an opportunity to use audio-visual supplements and out-of-class speaking and writing assignments. The course is \r\ndedicated to training all-round English learners by providing them the skills to succeed in using academic English.",
     "capacity": 60,
     "department": "GEN",
     "category": "GENERAL",
@@ -450,10 +837,10 @@
   "model": "course.course",
   "pk": 15,
   "fields": {
-    "title": "ºô¯¸À³¥Îµ{¦¡³]­p",
+    "title": "ç¶²ç«™æ‡‰ç”¨ç¨‹å¼è¨­è¨ˆ",
     "teacher": 6,
     "classroom": "AM_ROOM",
-    "description": "Python¤w¸g¬O¥Ø«e³Ì¨üÅwªïªºµ{¦¡»y¨¥¤§¤@¡A¦ÓDjango«h¬OPython»y¨¥¸Ì¼s¬°¨Ï¥ÎªºWeb Framework¤§¤@¡C¥Ø«eDjango¤w¸g¨ì5.0ª©¡A½Òµ{¥ç¥H¸Óª©¥»¬°¥D¶i¦æ±Ğ¾Ç½Òµ{¤º®e¡A¥]§t\r\n1.§Ö³t¾Ç²ß«Ø¥ß¤@­Ó¤JªùªºDjangoºô¯¸¡A¦p¨Ï¥ÎªÌµn¤J¡B¯d¨¥µ¥µ¥\r\n2.DjangoMVC(MTV)¬[ºc»¡©ú¡Cºô§}¹ïÀ³¡B¼ÒªO³]­p¡BModel©M¸ê®Æ®w¤§¶¡ªºÃö«Yµ¥¡C\r\n3.ºô¯¸¶}µo§Ş¥©\r\n¨ä¥¦¡GÁc¤¤ªºDjangoªº®Ñ¥Ø«e¦³ÂI¤Ö¡A¦ı­^¤å»P½u¤Wªº¾Ç²ß¸ê·½«Ü¦h¡C\r\n½Òµ{¤º®e¹w­p¬O¦³¾Ç¹LPython¡B²z¸Ñ¨ç¦¡¡Bª«¥ó¼¶¼g¡BÄ~©Ó¡B¼Ò²Õµ¥µ{¦¡¼¶¼g¡C\r\n½Ğ°È¥²¯d·N­×½Ò¾Ç¥Í­n¦³¾Ç¹L°òÂ¦Pythonµ{¦¡³]­p¡I½Òµ{¤º®e¥H«áºİ¶}µo¬°¥D¡A«eºİ­¶­±UI/UXªº³¡¤À«h¤ñ¨Ò¸û¤Ö\r\n\r\n´Á¤¤»P´Á¥½³£¬O¤À²Õ¡A¦b¦Ò¸Õ¶g®i¥Üºô¯¸¤º®e»P«ü©w¥\¯à¡A¨Ã¨Ï¥Îgithub³sµ²Ãº¥æ¡u­ì©lµ{¦¡½X¡v",
+    "description": "Pythonå·²ç¶“æ˜¯ç›®å‰æœ€å—æ­¡è¿çš„ç¨‹å¼èªè¨€ä¹‹ä¸€ï¼Œè€ŒDjangoå‰‡æ˜¯Pythonèªè¨€è£¡å»£ç‚ºä½¿ç”¨çš„Web Frameworkä¹‹ä¸€ã€‚ç›®å‰Djangoå·²ç¶“åˆ°5.0ç‰ˆï¼Œèª²ç¨‹äº¦ä»¥è©²ç‰ˆæœ¬ç‚ºä¸»é€²è¡Œæ•™å­¸èª²ç¨‹å…§å®¹ï¼ŒåŒ…å«\r\n1.å¿«é€Ÿå­¸ç¿’å»ºç«‹ä¸€å€‹å…¥é–€çš„Djangoç¶²ç«™ï¼Œå¦‚ä½¿ç”¨è€…ç™»å…¥ã€ç•™è¨€ç­‰ç­‰\r\n2.DjangoMVC(MTV)æ¶æ§‹èªªæ˜ã€‚ç¶²å€å°æ‡‰ã€æ¨¡æ¿è¨­è¨ˆã€Modelå’Œè³‡æ–™åº«ä¹‹é–“çš„é—œä¿‚ç­‰ã€‚\r\n3.ç¶²ç«™é–‹ç™¼æŠ€å·§\r\nå…¶å®ƒï¼šç¹ä¸­çš„Djangoçš„æ›¸ç›®å‰æœ‰é»å°‘ï¼Œä½†è‹±æ–‡èˆ‡ç·šä¸Šçš„å­¸ç¿’è³‡æºå¾ˆå¤šã€‚\r\nèª²ç¨‹å…§å®¹é è¨ˆæ˜¯æœ‰å­¸éPythonã€ç†è§£å‡½å¼ã€ç‰©ä»¶æ’°å¯«ã€ç¹¼æ‰¿ã€æ¨¡çµ„ç­‰ç¨‹å¼æ’°å¯«ã€‚\r\nè«‹å‹™å¿…ç•™æ„ä¿®èª²å­¸ç”Ÿè¦æœ‰å­¸éåŸºç¤Pythonç¨‹å¼è¨­è¨ˆï¼èª²ç¨‹å…§å®¹ä»¥å¾Œç«¯é–‹ç™¼ç‚ºä¸»ï¼Œå‰ç«¯é é¢UI/UXçš„éƒ¨åˆ†å‰‡æ¯”ä¾‹è¼ƒå°‘\r\n\r\næœŸä¸­èˆ‡æœŸæœ«éƒ½æ˜¯åˆ†çµ„ï¼Œåœ¨è€ƒè©¦é€±å±•ç¤ºç¶²ç«™å…§å®¹èˆ‡æŒ‡å®šåŠŸèƒ½ï¼Œä¸¦ä½¿ç”¨githubé€£çµç¹³äº¤ã€ŒåŸå§‹ç¨‹å¼ç¢¼ã€",
     "capacity": 60,
     "department": "IM",
     "category": "ELECTIVE",
@@ -467,7 +854,7 @@
   "model": "course.course",
   "pk": 16,
   "fields": {
-    "title": "¸ê®Æ®wºŞ²z",
+    "title": "è³‡æ–™åº«ç®¡ç†",
     "teacher": 5,
     "classroom": "AM_ROOM",
     "description": "One notebook per chapter. Start with this syllabus, then the introductory selections in Ch1, Ch2, and Ch5. The instructor sets stopping points; first-day programming is not required. GitHub displays saved outputs; use a Python 3 notebook with SQLite 3.39+ to run examples. Previous materials under revision are not assigned",
@@ -484,10 +871,10 @@
   "model": "course.course",
   "pk": 17,
   "fields": {
-    "title": "¥ş¥Á°ê¨¾±Ğ¨|­x¨Æ°V½m(¤G)-°ê¨¾¬Fµ¦",
+    "title": "å…¨æ°‘åœ‹é˜²æ•™è‚²è»äº‹è¨“ç·´(äºŒ)-åœ‹é˜²æ”¿ç­–",
     "teacher": 11,
     "classroom": "EN_ROOM",
-    "description": "1.¬°«Øºc¾Ç¥Í¥¿½Tªº¤H¥ÍºA«×©M¥ş¥Á°ê¨¾°ò¥»¯À¾i¡A¨Ã©ó½Òµ{Á¿­z®É¥H²LÅãªº¬G¨Æ±Ô­z¡F¨Ã³z¹L¤¶²Ğ¬ÛÃö¥vÂİ¡B¤H¥Í¸gÅç©Î¦U¶µ§@«~\r\n¡]¦p¹CÀ¸¡B¼v¤ù¡Bºô¯¸¡B®ÑÄyµ¥¡^¡A¼W²K±Ğ¾ÇÂ×´I©Ê¡C\r\n2.¨Ï¾Ç¥Í¤F¸Ñ¦b°ê®a¦w¥ş¦³«O»Ùªº«e´£¤U¡A§Ú°ê¤~¯à¥ÃÄòµo®i¡A¦p²ö©Ô§J­·¨aµ¥¨a®`µo¥Í®É¡A¥ş°ê¦U¦a¡u¥Á·q­x¡B­x·R¥Á¡vªºÁ|°Ê¡A\r\n  ´N¬O¥ş¥Á°ê¨¾³Ì¦nªº¸àÄÀ¡C\r\n3.°t¦X¶Ò§L¨î¤w©ó102¦~¤¸¤ë¹ê¬I¡A¤¶²Ğ§L§Ğ¹ê°È»P¶Ò§L¨î¥Í²P³Wµe¡A¼W¶i¾Ç¥Í¹ï§Ú°ê§L§Ğ¨î«×ªº»{ÃÑ¡A´£¨Ñ¾Ç¥Í§ó¦h¤¸ªº¿ï¾Ü¡C\r\n4.¬°±j¤Æ¾Ç¥Í¹ï°ê¨¾¬Fµ¦»P­x¨Æ¾Ô²¤ªºÃöª`¡A³z¹L¡u°ê¨¾¬G¨ÆÀ]¡v¸g¨å®×¨Ò»¡©ú¡A´£¤É¾Ç²ß¿³½ì¡C\r\n5.°t¦X¬ÛÃö¥DÃDÆ[¦h´CÅé±Ğ¾Ç¡A¥H´£¤É¾Ç²ß¦¨®Ä¡C\r\n6.§Q¥Îºô»Úºô¸ô³]©w¥DÃD¡A«ü¾É¾Ç¥Í¤À²Õ»`¶°¬ÛÃö¸ê®Æ¡C\r\n7.°ö¾i¾Ç¥Í¥D°Ê¾Ç²ß¡A¦¨¬°¤@ºØ¦Û¥D¾Ç²ß¤è¦¡¡C",
+    "description": "1.ç‚ºå»ºæ§‹å­¸ç”Ÿæ­£ç¢ºçš„äººç”Ÿæ…‹åº¦å’Œå…¨æ°‘åœ‹é˜²åŸºæœ¬ç´ é¤Šï¼Œä¸¦æ–¼èª²ç¨‹è¬›è¿°æ™‚ä»¥æ·ºé¡¯çš„æ•…äº‹æ•˜è¿°ï¼›ä¸¦é€éä»‹ç´¹ç›¸é—œå²è¹Ÿã€äººç”Ÿç¶“é©—æˆ–å„é …ä½œå“\r\nï¼ˆå¦‚éŠæˆ²ã€å½±ç‰‡ã€ç¶²ç«™ã€æ›¸ç±ç­‰ï¼‰ï¼Œå¢æ·»æ•™å­¸è±å¯Œæ€§ã€‚\r\n2.ä½¿å­¸ç”Ÿäº†è§£åœ¨åœ‹å®¶å®‰å…¨æœ‰ä¿éšœçš„å‰æä¸‹ï¼Œæˆ‘åœ‹æ‰èƒ½æ°¸çºŒç™¼å±•ï¼Œå¦‚è«æ‹‰å…‹é¢¨ç½ç­‰ç½å®³ç™¼ç”Ÿæ™‚ï¼Œå…¨åœ‹å„åœ°ã€Œæ°‘æ•¬è»ã€è»æ„›æ°‘ã€çš„èˆ‰å‹•ï¼Œ\r\n  å°±æ˜¯å…¨æ°‘åœ‹é˜²æœ€å¥½çš„è©®é‡‹ã€‚\r\n3.é…åˆå‹Ÿå…µåˆ¶å·²æ–¼102å¹´å…ƒæœˆå¯¦æ–½ï¼Œä»‹ç´¹å…µå½¹å¯¦å‹™èˆ‡å‹Ÿå…µåˆ¶ç”Ÿæ¶¯è¦ç•«ï¼Œå¢é€²å­¸ç”Ÿå°æˆ‘åœ‹å…µå½¹åˆ¶åº¦çš„èªè­˜ï¼Œæä¾›å­¸ç”Ÿæ›´å¤šå…ƒçš„é¸æ“‡ã€‚\r\n4.ç‚ºå¼·åŒ–å­¸ç”Ÿå°åœ‹é˜²æ”¿ç­–èˆ‡è»äº‹æˆ°ç•¥çš„é—œæ³¨ï¼Œé€éã€Œåœ‹é˜²æ•…äº‹é¤¨ã€ç¶“å…¸æ¡ˆä¾‹èªªæ˜ï¼Œæå‡å­¸ç¿’èˆˆè¶£ã€‚\r\n5.é…åˆç›¸é—œä¸»é¡Œè§€å¤šåª’é«”æ•™å­¸ï¼Œä»¥æå‡å­¸ç¿’æˆæ•ˆã€‚\r\n6.åˆ©ç”¨ç¶²éš›ç¶²è·¯è¨­å®šä¸»é¡Œï¼ŒæŒ‡å°å­¸ç”Ÿåˆ†çµ„è’é›†ç›¸é—œè³‡æ–™ã€‚\r\n7.åŸ¹é¤Šå­¸ç”Ÿä¸»å‹•å­¸ç¿’ï¼Œæˆç‚ºä¸€ç¨®è‡ªä¸»å­¸ç¿’æ–¹å¼ã€‚",
     "capacity": 60,
     "department": "GEN",
     "category": "GENERAL",
@@ -501,10 +888,10 @@
   "model": "course.course",
   "pk": 18,
   "fields": {
-    "title": "¸ê®Æµ²ºc",
+    "title": "è³‡æ–™çµæ§‹",
     "teacher": 4,
     "classroom": "ACC_ROOM",
-    "description": "¸ê®Æµ²ºc(data structures)¬O¸ê°T¬ÛÃö¬ì¨t(information relational departments)ªº®Ö¤ß¬ì¥Ø.¾Ç²ß¸ê®Æµ²ºc(data structures)ªº©w¸q¤Î¨äÀ³¥Î,¨ä¤¤¥²»İª¾¹D¹q¸£ªº¸ê®Æ¬[ºc¤ÎÀx¦s¤è¦¡,¥H¨Ï¦P¾Ç¦b¥¼¨Ó¹q¸£±M·~½Òµ{¤W¦³¨}¦nªº°òÂ¦.¸ê®Æµ²ºc(data structures)¥D­n¬O¦b¬ã¨s¦p¦ó§â­ì©lªº¡u¸ê®Æ¡v(data)¡A²ÕÂ´¡B¦w±Æ¡B¦s©ñ¨ì¹q¸£¤¤ªº¤@ªù¾Ç°İ¡C¹ï©ó¸`¬ÙÀx¦sªÅ¶¡¡B¼W¥[¸ê®Æªº¦w¥ş©Ê»P³B²z³t«×±N¦³«Ü¤jÀ°§U¡A¦]¦¹¹ï©ó¸ê®Æµ²ºc(data structures)ªº¤F¸Ñ»P§_¡AÃö«Y¨ì¤é«á¦b³n¡BµwÅéµo®i¤W¦³À±¨¬²`»·ªº¼vÅT¡C \r\n1. ¸ê®Æµ²ºc(data structures)¾Ç¤°»ò¡G¤¶²Ğ¸ê®Æ»P¸ê°T¡Bºtºâªk¤Î¨ä®Ä²v»P¦ô­p¡C \r\n2. °}¦C(array)¡G¤¶²ĞÀRºAµ²ºc«¬ºA¡B´`§Ç°O¾ĞÅé°t¸m¡B¦h¶µ¦¡»P¯x°}¡C \r\n3. Ãìµ²¦ê¦C¡G(linked list)¤¶²Ğ°ÊºAµ²ºc«¬ºA(dynamic structure style)¡C \r\n4. °ïÅ|»P¦î¦C¡G¤¶²Ğ°ïÅ|(stack)¡B¦î¦C(queue)¡C \r\n5. ¾ğ¤Î¤G¤¸¾ğ¡G¤¶²Ğ¾ğªºªí¥Üªk¡B¤G¤¸¾ğ¡B¤Ş½u¾ğ¡B°ï¿n»PÀu¥ı¦î¦C¡C \r\n6. ±Æ§Ç¡G¤¶²Ğ¥æ´«¦¡±Æ§Ç¡B¿ï¾Ü¦¡±Æ§Ç»P¦UºØ±Æ§Çªkªº®É¶¡¤ÎªÅ¶¡½ÆÂø«×¤ñ¸û¡C \r\n7. ·j´M¸ê®Æ¡G¤¶²Ğ´`§Ç·j´M¡B¤G¤¸·j´M¾ğ¡BAVL ¾ğ¡C",
+    "description": "è³‡æ–™çµæ§‹(data structures)æ˜¯è³‡è¨Šç›¸é—œç§‘ç³»(information relational departments)çš„æ ¸å¿ƒç§‘ç›®.å­¸ç¿’è³‡æ–™çµæ§‹(data structures)çš„å®šç¾©åŠå…¶æ‡‰ç”¨,å…¶ä¸­å¿…éœ€çŸ¥é“é›»è…¦çš„è³‡æ–™æ¶æ§‹åŠå„²å­˜æ–¹å¼,ä»¥ä½¿åŒå­¸åœ¨æœªä¾†é›»è…¦å°ˆæ¥­èª²ç¨‹ä¸Šæœ‰è‰¯å¥½çš„åŸºç¤.è³‡æ–™çµæ§‹(data structures)ä¸»è¦æ˜¯åœ¨ç ”ç©¶å¦‚ä½•æŠŠåŸå§‹çš„ã€Œè³‡æ–™ã€(data)ï¼Œçµ„ç¹”ã€å®‰æ’ã€å­˜æ”¾åˆ°é›»è…¦ä¸­çš„ä¸€é–€å­¸å•ã€‚å°æ–¼ç¯€çœå„²å­˜ç©ºé–“ã€å¢åŠ è³‡æ–™çš„å®‰å…¨æ€§èˆ‡è™•ç†é€Ÿåº¦å°‡æœ‰å¾ˆå¤§å¹«åŠ©ï¼Œå› æ­¤å°æ–¼è³‡æ–™çµæ§‹(data structures)çš„äº†è§£èˆ‡å¦ï¼Œé—œä¿‚åˆ°æ—¥å¾Œåœ¨è»Ÿã€ç¡¬é«”ç™¼å±•ä¸Šæœ‰å½Œè¶³æ·±é çš„å½±éŸ¿ã€‚ \r\n1. è³‡æ–™çµæ§‹(data structures)å­¸ä»€éº¼ï¼šä»‹ç´¹è³‡æ–™èˆ‡è³‡è¨Šã€æ¼”ç®—æ³•åŠå…¶æ•ˆç‡èˆ‡ä¼°è¨ˆã€‚ \r\n2. é™£åˆ—(array)ï¼šä»‹ç´¹éœæ…‹çµæ§‹å‹æ…‹ã€å¾ªåºè¨˜æ†¶é«”é…ç½®ã€å¤šé …å¼èˆ‡çŸ©é™£ã€‚ \r\n3. éˆçµä¸²åˆ—ï¼š(linked list)ä»‹ç´¹å‹•æ…‹çµæ§‹å‹æ…‹(dynamic structure style)ã€‚ \r\n4. å †ç–Šèˆ‡ä½‡åˆ—ï¼šä»‹ç´¹å †ç–Š(stack)ã€ä½‡åˆ—(queue)ã€‚ \r\n5. æ¨¹åŠäºŒå…ƒæ¨¹ï¼šä»‹ç´¹æ¨¹çš„è¡¨ç¤ºæ³•ã€äºŒå…ƒæ¨¹ã€å¼•ç·šæ¨¹ã€å †ç©èˆ‡å„ªå…ˆä½‡åˆ—ã€‚ \r\n6. æ’åºï¼šä»‹ç´¹äº¤æ›å¼æ’åºã€é¸æ“‡å¼æ’åºèˆ‡å„ç¨®æ’åºæ³•çš„æ™‚é–“åŠç©ºé–“è¤‡é›œåº¦æ¯”è¼ƒã€‚ \r\n7. æœå°‹è³‡æ–™ï¼šä»‹ç´¹å¾ªåºæœå°‹ã€äºŒå…ƒæœå°‹æ¨¹ã€AVL æ¨¹ã€‚",
     "capacity": 60,
     "department": "IM",
     "category": "REQUIRED",
@@ -518,10 +905,10 @@
   "model": "course.course",
   "pk": 19,
   "fields": {
-    "title": "¼Æ¦ì¤º®e·§½×",
+    "title": "æ•¸ä½å…§å®¹æ¦‚è«–",
     "teacher": 3,
     "classroom": "IB_ROOM",
-    "description": "1.¤F¸Ñ¼Æ¦ì¤º®eªº¥»½è¡A»PÅU«È»ù­È³Ğ³yªº·N²[¡AÁ×§K¼Æ¦ì¦æ¾Pµuµø¯g¡C\r\n2.¼ô±x·s¼Æ¦ì¤º®eªº¬[ºc¡A¨Ã±N¨äÀ³¥Î©ó­Ó®×¾ãÅéµ¦²¤³W¹º¤¤¡C\r\n3.¾Ç²ß¼Æ¦ì¤º®e¤ÀªRªº¤èªk»P§Ş³N¡A¨Ã°t¦X¬ÛÃö·s´CÅé¸s²³¶Ò¸ê´£®×¡C\r\n4.¤F¸Ñ¼Æ¦ì¤º®eªºµ{§Ç¤Î¤èªk¡A¦³®Ä¾É¤J«~µPµ¦²¤¡A±j¤Æ¤º®e»s§@¨Ã´£¤É¤j¾ÇªÀ·|³d¥ô»ù­È¡C",
+    "description": "1.äº†è§£æ•¸ä½å…§å®¹çš„æœ¬è³ªï¼Œèˆ‡é¡§å®¢åƒ¹å€¼å‰µé€ çš„æ„æ¶µï¼Œé¿å…æ•¸ä½è¡ŒéŠ·çŸ­è¦–ç—‡ã€‚\r\n2.ç†Ÿæ‚‰æ–°æ•¸ä½å…§å®¹çš„æ¶æ§‹ï¼Œä¸¦å°‡å…¶æ‡‰ç”¨æ–¼å€‹æ¡ˆæ•´é«”ç­–ç•¥è¦åŠƒä¸­ã€‚\r\n3.å­¸ç¿’æ•¸ä½å…§å®¹åˆ†æçš„æ–¹æ³•èˆ‡æŠ€è¡“ï¼Œä¸¦é…åˆç›¸é—œæ–°åª’é«”ç¾¤çœ¾å‹Ÿè³‡ææ¡ˆã€‚\r\n4.äº†è§£æ•¸ä½å…§å®¹çš„ç¨‹åºåŠæ–¹æ³•ï¼Œæœ‰æ•ˆå°å…¥å“ç‰Œç­–ç•¥ï¼Œå¼·åŒ–å…§å®¹è£½ä½œä¸¦æå‡å¤§å­¸ç¤¾æœƒè²¬ä»»åƒ¹å€¼ã€‚",
     "capacity": 60,
     "department": "IM",
     "category": "ELECTIVE",
@@ -546,119 +933,6 @@
     "daily_weight": 40,
     "midterm_weight": 30,
     "final_weight": 30
-  }
-},
-{
-  "model": "users.studentprofile",
-  "pk": 3,
-  "fields": {
-    "user": 9,
-    "student_id": "114510",
-    "department": "IM",
-    "grade": 2,
-    "max_credits": 25
-  }
-},
-{
-  "model": "users.studentprofile",
-  "pk": 4,
-  "fields": {
-    "user": 10,
-    "student_id": "114511",
-    "department": "FIN",
-    "grade": 2,
-    "max_credits": 25
-  }
-},
-{
-  "model": "users.studentprofile",
-  "pk": 5,
-  "fields": {
-    "user": 8,
-    "student_id": "114512",
-    "department": "BA",
-    "grade": 2,
-    "max_credits": 25
-  }
-},
-{
-  "model": "users.teacherprofile",
-  "pk": 2,
-  "fields": {
-    "user": 4,
-    "department": "GEN"
-  }
-},
-{
-  "model": "users.teacherprofile",
-  "pk": 3,
-  "fields": {
-    "user": 6,
-    "department": "IM"
-  }
-},
-{
-  "model": "users.teacherprofile",
-  "pk": 4,
-  "fields": {
-    "user": 2,
-    "department": "IM"
-  }
-},
-{
-  "model": "users.teacherprofile",
-  "pk": 5,
-  "fields": {
-    "user": 5,
-    "department": "IM"
-  }
-},
-{
-  "model": "users.teacherprofile",
-  "pk": 6,
-  "fields": {
-    "user": 3,
-    "department": "IM"
-  }
-},
-{
-  "model": "users.teacherprofile",
-  "pk": 7,
-  "fields": {
-    "user": 7,
-    "department": "IM"
-  }
-},
-{
-  "model": "users.teacherprofile",
-  "pk": 8,
-  "fields": {
-    "user": 11,
-    "department": "IM"
-  }
-},
-{
-  "model": "users.teacherprofile",
-  "pk": 9,
-  "fields": {
-    "user": 12,
-    "department": "GEN"
-  }
-},
-{
-  "model": "users.teacherprofile",
-  "pk": 10,
-  "fields": {
-    "user": 13,
-    "department": "GEN"
-  }
-},
-{
-  "model": "users.teacherprofile",
-  "pk": 11,
-  "fields": {
-    "user": 14,
-    "department": "GEN"
   }
 }
 ]

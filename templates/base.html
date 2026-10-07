@@ -2,47 +2,138 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}選課系統{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --slate-main: #0F172A;
+            --slate-sidebar: #1E293B;
+            --slate-bg: #F1F5F9; /* 稍微加深背景，提升卡片對比 */
+            --slate-card: #FFFFFF;
+        }
+
+        body {
+            background-color: var(--slate-bg);
+            color: #1E293B;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: var(--slate-sidebar);
+            color: #F1F5F9;
+            z-index: 1000;
+        }
+
+        .sidebar .nav-link {
+            color: #94A3B8;
+            border-radius: 8px;
+            margin: 4px 12px;
+            padding: 10px 16px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            color: #FFFFFF;
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .main-content {
+            margin-left: 260px;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .card-custom {
+            background-color: var(--slate-card);
+            border-radius: 10px;
+            border: 1px solid #CBD5E1; /* 增強邊框清晰度 */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+
+        /* 全域列印控制 */
+        @media print {
+            .sidebar, .btn, form, alert, nav, .no-print {
+                display: none !important;
+            }
+            .main-content {
+                margin-left: 0 !important;
+                padding: 0 !important;
+            }
+            body {
+                background-color: #FFFFFF !important;
+            }
+        }
+    </style>
 </head>
-<body class="bg-light">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="{% url 'courses:course_list' %}">🎓 選課系統</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <div class="navbar-nav ms-auto align-items-center">
-                    {% if user.is_authenticated %}
-                        <!-- 如果是學生才顯示課表與個人主頁 -->
-                        {% if user.student_profile %}
-                            <a class="nav-link me-2" href="{% url 'courses:my_courses' %}">我的課表</a>
-                            <a class="nav-link me-2" href="{% url 'courses:student_profile' %}">個人主頁</a>
-                        {% endif %}
+<body>
 
-                        <!-- 如果是教師顯示教師端管理 -->
-                        {% if user.teacher_profile %}
-                            <a class="nav-link me-2 text-info" href="{% url 'courses:teacher_courses' %}">教師端管理</a>
-                        {% endif %}
+    {% if user.is_authenticated %}
+    <aside class="sidebar d-flex flex-column justify-content-between py-3 no-print" aria-label="主要導覽">
+        <div>
+            <div class="px-4 mb-4">
+                <a href="{% url 'courses:course_list' %}" class="text-white text-decoration-none h5 fw-bold d-block mb-0">
+                    🎓 選課管理系統
+                </a>
+                <small class="text-slate-400 fs-7" style="color: #94A3B8;">113 學年度 第一學期</small>
+            </div>
 
-                        <span class="nav-link text-light me-3">你好，{{ user.username }}</span>
-                        <form action="{% url 'logout' %}" method="post" class="d-inline">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-outline-light btn-sm">登出</button>
-                        </form>
-                    {% else %}
-                        <a class="btn btn-outline-light btn-sm" href="/accounts/login/?next={{ request.path }}">登入</a>
-                    {% endif %}
-                </div>                            
-            </div>      
+            <nav class="nav flex-column">
+                <!-- 將 courses:student_profile 統一改為 users:student_profile -->
+                {% if user.student_profile %}
+                    <a href="{% url 'users:student_profile' %}" class="nav-link {% if request.resolver_match.url_name == 'student_profile' %}active{% endif %}">
+                        <i class="bi bi-house-door"></i> 🏠 個人概況
+                    </a>
+                    <a href="{% url 'courses:my_courses' %}" class="nav-link {% if request.resolver_match.url_name == 'my_courses' %}active{% endif %}">
+                        <i class="bi bi-calendar-week"></i> 📅 我的課表
+                    </a>
+                    <a href="{% url 'courses:course_list' %}" class="nav-link {% if request.resolver_match.url_name == 'course_list' %}active{% endif %}">
+                        <i class="bi bi-book"></i> 📚 線上選課
+                    </a>
+                {% elif user.teacher_profile %}
+                    <a href="{% url 'users:student_profile' %}" class="nav-link {% if request.resolver_match.url_name == 'student_profile' %}active{% endif %}">
+                        <i class="bi bi-person-badge"></i> 🏠 個人概況
+                    </a>
+                    <a href="{% url 'courses:teacher_courses' %}" class="nav-link {% if request.resolver_match.url_name == 'teacher_courses' %}active{% endif %}">
+                        <i class="bi bi-journal-check"></i> 👨‍🏫 授課管理
+                    </a>
+                    <a href="{% url 'courses:course_list' %}" class="nav-link {% if request.resolver_match.url_name == 'course_list' %}active{% endif %}">
+                        <i class="bi bi-search"></i> 📚 全校課程 (唯讀)
+                    </a>
+                {% endif %}                
+            </nav>
         </div>
-    </nav>
 
-    <div class="container mb-5">
+        <div class="px-3">
+            <div class="p-3 rounded bg-dark bg-opacity-50 mb-2">
+                <div class="fw-bold text-white fs-6">{{ user.username }}</div>
+                <small style="color: #94A3B8;">
+                    {% if user.student_profile %}學生{% elif user.teacher_profile %}教師{% else %}管理者{% endif %}
+                </small>
+            </div>
+            <form action="{% url 'logout' %}" method="post" class="w-100">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-danger btn-sm w-100 d-flex align-items-center justify-content-center gap-2">
+                    <i class="bi bi-box-arrow-right"></i> 安全登出
+                </button>
+            </form>
+        </div>
+    </aside>
+    {% endif %}
+
+    <main class="{% if user.is_authenticated %}main-content{% else %}container my-5{% endif %}">
         {% if messages %}
             {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm" role="alert">
+                <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show shadow-sm mb-4 no-print" role="alert">
                     {{ message }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
@@ -50,7 +141,7 @@
         {% endif %}
 
         {% block content %}{% endblock %}
-    </div>
+    </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

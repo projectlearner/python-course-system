@@ -1,86 +1,97 @@
 {% extends 'base.html' %}
 
+{% block title %}個人概況 - 選課系統{% endblock %}
+
 {% block content %}
-<div class="container mt-4">
-    <!-- 個人學業資訊卡片 -->
-    <div class="card bg-dark text-white border-secondary mb-4">
-        <div class="card-body">
-            <h3 class="card-title mb-3">
-                {{ student.user.first_name }}{{ student.user.last_name }} 的學業個人主頁
-            </h3>
-            <div class="row fs-5">
-                <div class="col-md-3">
-                    <strong>學號：</strong>{{ student.student_id }}
+<div class="container-fluid p-0">
+    {% if role == 'student' %}
+        <div class="card card-custom p-4 mb-4">
+            <h4 class="fw-bold mb-3">🏠 學生個人概況</h4>
+            <div class="row fs-6 mb-3">
+                <div class="col-md-3"><strong>姓名：</strong>{{ student.user.last_name }}{{ student.user.first_name }}</div>
+                <div class="col-md-3"><strong>學號：</strong>{{ student.student_id }}</div>
+                <div class="col-md-3"><strong>系所：</strong>{{ student.get_department_display }}</div>
+                <div class="col-md-3"><strong>年級：</strong>{{ student.get_grade_display }}</div>
+            </div>
+
+            <div class="mt-2">
+                <div class="d-flex justify-content-between mb-1">
+                    <span class="fw-bold">當期學分修習進度</span>
+                    <span class="fw-bold text-primary">{{ total_credits }} / {{ student.max_credits }} 學分</span>
                 </div>
-                <!-- 關鍵 1：呼叫 get_department_display 取得中文系所 -->
-                <div class="col-md-3">
-                    <strong>系所：</strong>{{ student.get_department_display }}
-                </div>
-                <!-- 關鍵 2：呼叫 get_grade_display 取得年級中文 -->
-                <div class="col-md-3">
-                    <strong>年級：</strong>{{ student.get_grade_display }}
-                </div>
-                <div class="col-md-3">
-                    <strong>當期學分：</strong>
-                    <span class="badge {% if total_credits > student.max_credits %}bg-danger{% else %}bg-success{% endif %}">
-                        {{ total_credits }} / {{ student.max_credits }} 學分
-                    </span>
+                <div class="progress" style="height: 12px;">
+                    <!-- 使用 CSS 自訂變數傳遞百分比數值，消除 Linter 語法警告 -->
+                    <div class="progress-bar bg-success" role="progressbar" style="--progress-width: {{ credit_percentage|default:0 }}%; width: var(--progress-width);" aria-valuenow="{{ total_credits }}" aria-valuemin="0" aria-valuemax="{{ student.max_credits }}"></div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- 修課與成績明細表格 -->
-    <h4 class="text-white mb-3">本學期修課與成績明細</h4>
-    <div class="table-responsive">
-        <table class="table table-dark table-hover align-middle border-secondary">
-            <thead>
-                <tr>
-                    <th>開課系所</th>
-                    <th>課程名稱</th>
-                    <th>學分</th>
-                    <th>平時成績 ({{ enrollment.course.daily_weight }}%)</th>
-                    <th>期中成績 ({{ enrollment.course.midterm_weight }}%)</th>
-                    <th>期末成績 ({{ enrollment.course.final_weight }}%)</th>
-                    <th>總成績</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for enrollment in enrollments %}
-                <tr>
-                    <!-- 關鍵 3：課程系所中文顯示 -->
-                    <td>
-                        <span class="badge bg-secondary">
-                            {{ enrollment.course.get_department_display }}
-                        </span>
-                    </td>
+        <div class="card card-custom p-4">
+            <h5 class="fw-bold mb-3">本學期已選課程與成績明細</h5>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>系所</th>
+                            <th>課程名稱</th>
+                            <th>學分</th>
+                            <th>平時成績 (30%)</th>
+                            <th>期中成績 (35%)</th>
+                            <th>期末成績 (35%)</th>
+                            <th>總成績</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for e in enrollments %}
+                        <tr>
+                            <td><span class="badge bg-secondary">{{ e.course.get_department_display }}</span></td>
+                            <td class="fw-bold">{{ e.course.title }}</td>
+                            <td>{{ e.course.credits }}</td>
+                            <td>{{ e.daily_score|default:"--" }}</td>
+                            <td>{{ e.midterm_score|default:"--" }}</td>
+                            <td>{{ e.final_score|default:"--" }}</td>
+                            <td>
+                                {% if e.final_grade != None %}
+                                    <span class="fw-bold {% if e.final_grade >= 60 %}text-success{% else %}text-danger{% endif %}">{{ e.final_grade }}</span>
+                                {% else %}
+                                    <span class="badge bg-light text-dark border">未結算</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="7" class="text-center text-muted">尚無選課紀錄</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-                    <!-- 關鍵 4：課程名稱欄位是 title -->
-                    <td class="fw-bold">
-                        {{ enrollment.course.title }}
-                    </td>
+    {% elif role == 'teacher' %}
+        <div class="card card-custom p-4 mb-4">
+            <h4 class="fw-bold mb-3">👨‍🏫 教師個人概況</h4>
+            <div class="row fs-6">
+                <div class="col-md-4"><strong>教師姓名：</strong>{{ teacher.name }}</div>
+                <div class="col-md-4"><strong>教職員號碼：</strong>{{ teacher.teacher_id }}</div>
+                <div class="col-md-4"><strong>所屬系所：</strong>{{ teacher.get_department_display }}</div>
+            </div>
+        </div>
 
-                    <td>{{ enrollment.course.credits }}</td>
-                    <td>{{ enrollment.daily_score|default:"--" }}</td>
-                    <td>{{ enrollment.midterm_score|default:"--" }}</td>
-                    <td>{{ enrollment.final_score|default:"--" }}</td>
-                    <td>
-                        {% if enrollment.final_grade != None %}
-                            <span class="fw-bold {% if enrollment.final_grade >= 60 %}text-success{% else %}text-danger{% endif %}">
-                                {{ enrollment.final_grade }}
-                            </span>
-                        {% else %}
-                            <span class="text-muted">未結算</span>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="7" class="text-center text-muted">目前尚未選修任何課程</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card card-custom p-4 text-center">
+                    <h6 class="text-muted fw-bold">本學期授課門數</h6>
+                    <h2 class="fw-bold text-primary my-2">{{ total_courses }}</h2>
+                    <small class="text-muted">門課程</small>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card card-custom p-4 text-center">
+                    <h6 class="text-muted fw-bold">指導學生總人數</h6>
+                    <h2 class="fw-bold text-success my-2">{{ total_students }}</h2>
+                    <small class="text-muted">人次</small>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}
