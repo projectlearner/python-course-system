@@ -79,7 +79,7 @@
             
             {% if form.errors %}
                 <div class="alert alert-danger py-2 small" role="alert">
-                    學號/教職員號碼或密碼錯誤，請重新確認。
+                    學號 / 教職員代號或密碼錯誤，請重新確認。
                 </div>
             {% endif %}
 
@@ -87,14 +87,14 @@
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="id_username" class="form-label fw-semibold text-secondary">學號 / 教職員代號</label>
-                    <input type="text" name="username" class="form-control form-control-lg bg-light" id="id_username" placeholder="請輸入帳號" required autofocus>
+                    <input type="text" name="username" class="form-control form-control-lg bg-light" id="id_username" placeholder="請輸入學號或教職員代號" required autofocus>
                 </div>
                 <div class="mb-4">
                     <label for="id_password" class="form-label fw-semibold text-secondary">密碼</label>
                     <input type="password" name="password" class="form-control form-control-lg bg-light" id="id_password" placeholder="請輸入密碼" required>
                 </div>
                 <input type="hidden" name="next" value="{{ next }}" />
-                <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold shadow-sm">立即登入</button>
+                <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold shadow-sm">登入系統</button>
             </form>
         </div>
     </div>

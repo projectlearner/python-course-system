@@ -34,16 +34,20 @@ class CourseTime(models.Model):
     def clean(self):
         super().clean()
 
+        # 如果尚未關聯課程，直接跳過驗證
         if not hasattr(self, 'course') or not self.course:
             return
 
-        # 1. 教室衝堂檢查 (同星期、同節次、同教室，排除自己所屬課程)
+        # 1. 教室衝堂檢查 (同星期、同節次、同教室)
         if self.course.classroom:
             classroom_conflict = CourseTime.objects.filter(
                 weekday=self.weekday,
                 period=self.period,
                 course__classroom=self.course.classroom
-            ).exclude(course=self.course)  # 排除自己這門課的所有時段記錄（避免修改教室時自我衝突）
+            )
+            # 只有當 course 已儲存時才需要 exclude(course=self.course)
+            if self.course.pk:
+                classroom_conflict = classroom_conflict.exclude(course=self.course)
 
             if classroom_conflict.exists():
                 conflicting_course = classroom_conflict.first().course
@@ -52,13 +56,16 @@ class CourseTime(models.Model):
                     f"已經被課程「{conflicting_course.title}」佔用。"
                 )
 
-        # 2. 教師時間衝堂檢查 (同星期、同節次、同教師，排除自己所屬課程)
+        # 2. 教師時間衝堂檢查 (同星期、同節次、同教師)
         if self.course.teacher:
             teacher_conflict = CourseTime.objects.filter(
                 weekday=self.weekday,
                 period=self.period,
                 course__teacher=self.course.teacher
-            ).exclude(course=self.course)  # 排除自己這門課
+            )
+            # 只有當 course 已儲存時才需要 exclude(course=self.course)
+            if self.course.pk:
+                teacher_conflict = teacher_conflict.exclude(course=self.course)
 
             if teacher_conflict.exists():
                 conflicting_course = teacher_conflict.first().course
@@ -74,7 +81,6 @@ class CourseTime(models.Model):
 
     def __str__(self):
         return f"{self.course.title} - 週{self.weekday} 第{self.period}節"
-
 
 class Enrollment(models.Model):
     course = models.ForeignKey('Course', on_delete=models.CASCADE, related_name="enrollments")
