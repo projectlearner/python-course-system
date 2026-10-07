@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import transaction
 from .models import Course, Enrollment, CourseTime, DEPARTMENT_CHOICES, CATEGORY_CHOICES
+from django.core.exceptions import ValidationError
 
 # 目前選課階段
 CURRENT_PHASE = 2
@@ -306,23 +307,38 @@ def course_roster(request, course_id):
     }
     return render(request, 'course_roster.html', context)
 
-@login_required
 def edit_course(request, course_id):
-    """教師編輯課程資訊"""
-    if not hasattr(request.user, 'teacher_profile'):
-        messages.error(request, "您沒有權限修改課程資訊！")
-        return redirect('courses:course_list')
-
-    course = get_object_or_404(Course, id=course_id, teacher=request.user.teacher_profile)
+    teacher = request.user.teacher_profile
+    course = get_object_or_404(Course, id=course_id, teacher=teacher)
 
     if request.method == 'POST':
-        course.title = request.POST.get('title', course.title)
-        course.classroom = request.POST.get('classroom', course.classroom)
-        course.capacity = int(request.POST.get('capacity', course.capacity))
-        course.description = request.POST.get('description', course.description)
-        course.save()
+        try:
+            course.title = request.POST.get('title', '').strip()
+            course.classroom = request.POST.get('classroom')
+            course.capacity = int(request.POST.get('capacity', course.capacity))
+            course.description = request.POST.get('description', '').strip()
+            
+            # 讀取教師設定的成績比例
+            course.daily_weight = int(request.POST.get('daily_weight', 40))
+            course.midterm_weight = int(request.POST.get('midterm_weight', 30))
+            course.final_weight = int(request.POST.get('final_weight', 30))
 
-        messages.success(request, f"已成功更新課程【{course.title}】的資訊！")
-        return redirect('courses:teacher_courses')
+            # 觸發 Model 內建的 clean() 驗證（包含 100% 比例、教室衝堂、教師衝堂排除自己）
+            course.full_clean()
+            course.save()
 
-    return render(request, 'edit_course.html', {'course': course})
+            messages.success(request, f"課程《{course.title}》資訊已成功儲存！")
+            return redirect('courses:teacher_courses')
+
+        except ValidationError as e:
+            # 捕捉來自 clean() 的錯誤訊息並顯示給老師
+            for field, errors in e.message_dict.items() if hasattr(e, 'message_dict') else [('non_field', e.messages)]:
+                for err in errors:
+                    messages.error(request, err)
+        except ValueError:
+            messages.error(request, "輸入格式不正確，請填寫有效數值！")
+
+    return render(request, 'edit_course.html', {
+        'course': course,
+        'classroom_choices': Course.CLASSROOM_CHOICES
+    })

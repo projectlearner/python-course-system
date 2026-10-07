@@ -55,10 +55,30 @@
                     <small class="text-muted fw-bold">{{ item.course.credits }} 學分</small>
                 </div>
 
-                <h5 class="card-title fw-bold text-dark mt-2">{{ item.course.title }}</h5>
+                <!-- 點擊課程名稱跳轉至詳細頁面 -->
+                <h5 class="card-title fw-bold text-dark mt-2 mb-2">
+                    <a href="{% url 'courses:course_detail' item.course.id %}" class="text-decoration-none text-dark hover-primary">
+                        📘 {{ item.course.title }}
+                    </a>
+                </h5>
+
                 <p class="card-text text-muted small mb-2">
-                    教師：{{ item.course.teacher.name|default:"未定" }} | 教室：{{ item.course.get_classroom_display }}
+                    👨‍🏫 教師：
+                    {% if item.course.teacher %}
+                        {{ item.course.teacher.user.get_full_name|default:item.course.teacher.user.username }}
+                    {% else %}
+                        未定
+                    {% endif %}
+                    <br>
+                    📍 教室：{{ item.course.get_classroom_display }}
                 </p>
+
+                <!-- 實時反映教師修改的成績配分 -->
+                <div class="mb-3">
+                    <span class="badge bg-light text-dark border w-100 text-start py-2">
+                        ⚖️ 成績配分：平時 {{ item.course.daily_weight }}% / 期中 {{ item.course.midterm_weight }}% / 期末 {{ item.course.final_weight }}%
+                    </span>
+                </div>
 
                 <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
                     {% if is_teacher %}

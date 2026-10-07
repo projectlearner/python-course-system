@@ -20,13 +20,18 @@
 
         <div class="row g-3 fs-6 mb-4">
             <div class="col-md-6">
-                <strong>授課教師：</strong>{{ course.teacher.name|default:"未定" }}
+                <strong>👨‍🏫 授課教師：</strong>
+                {% if course.teacher %}
+                    {{ course.teacher.user.get_full_name|default:course.teacher.user.username }}
+                {% else %}
+                    未定
+                {% endif %}
             </div>
             <div class="col-md-6">
-                <strong>上課教室：</strong>{{ course.get_classroom_display }}
+                <strong>📍 上課教室：</strong>{{ course.get_classroom_display }}
             </div>
             <div class="col-md-12">
-                <strong>上課時間：</strong>
+                <strong>⏰ 上課時間：</strong>
                 {% for time in course.times.all %}
                     <span class="badge bg-light text-dark border me-1">週{{ time.weekday }} 第 {{ time.period }} 節</span>
                 {% empty %}
@@ -35,9 +40,19 @@
             </div>
         </div>
 
+        <!-- 實時反應教師修改的成績配分比例區塊 -->
+        <div class="bg-light p-3 rounded mb-4 border">
+            <strong class="d-block mb-2 text-dark">📊 成績評分標準：</strong>
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge bg-secondary fs-6">平時成績：{{ course.daily_weight }}%</span>
+                <span class="badge bg-secondary fs-6">期中成績：{{ course.midterm_weight }}%</span>
+                <span class="badge bg-secondary fs-6">期末成績：{{ course.final_weight }}%</span>
+            </div>
+        </div>
+
         <div class="mb-4">
-            <h5 class="fw-bold">課程簡介</h5>
-            <p class="text-secondary">{{ course.description|default:"尚無課程簡介資料。" }}</p>
+            <h5 class="fw-bold">📖 課程簡介</h5>
+            <p class="text-secondary" style="white-space: pre-line;">{{ course.description|default:"尚無課程簡介資料。" }}</p>
         </div>
 
         <div class="d-flex justify-content-between align-items-center pt-3 border-top">
@@ -54,13 +69,12 @@
                 {% elif can_enroll %}
                     <form action="{% url 'courses:enroll_course' course.id %}" method="post" class="m-0">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-primary">立即加選</button>
+                        <button type="submit" class="btn btn-primary">庫存加選</button>
                     </form>
                 {% else %}
                     <button class="btn btn-secondary" disabled>{{ disabled_reason }}</button>
                 {% endif %}
             {% else %}
-                <!-- 修正這裡的連結：指向一般學生/教師登入頁，而非 admin 管理員登入 -->
                 <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-primary">請先登入系統以進行選課</a>
             {% endif %}
         </div>

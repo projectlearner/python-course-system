@@ -35,9 +35,9 @@
                             <th>系所</th>
                             <th>課程名稱</th>
                             <th>學分</th>
-                            <th>平時成績 (30%)</th>
-                            <th>期中成績 (35%)</th>
-                            <th>期末成績 (35%)</th>
+                            <th>平時成績</th>
+                            <th>期中成績</th>
+                            <th>期末成績</th>
                             <th>總成績</th>
                         </tr>
                     </thead>
@@ -45,7 +45,12 @@
                         {% for e in enrollments %}
                         <tr>
                             <td><span class="badge bg-secondary">{{ e.course.get_department_display }}</span></td>
-                            <td class="fw-bold">{{ e.course.title }}</td>
+                            <td class="fw-bold">
+                                <!-- 點擊課程名稱可直接跳轉至課程詳情 -->
+                                <a href="{% url 'courses:course_detail' e.course.id %}" class="text-decoration-none text-dark link-primary">
+                                    {{ e.course.title }}
+                                </a>
+                            </td>
                             <td>{{ e.course.credits }}</td>
                             <td>{{ e.daily_score|default:"--" }}</td>
                             <td>{{ e.midterm_score|default:"--" }}</td>

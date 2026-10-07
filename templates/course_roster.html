@@ -9,15 +9,31 @@
             <span class="badge bg-secondary mb-1">{{ course.get_department_display }}</span>
             <h3 class="fw-bold text-dark mb-0">📝 學生成績登記：{{ course.title }}</h3>
         </div>
-        <a href="{% url 'courses:teacher_courses' %}" class="btn btn-outline-secondary fw-bold">← 返回授課管理</a>
+        <div class="d-flex gap-2">
+            <a href="{% url 'courses:edit_course' course.id %}" class="btn btn-outline-primary fw-bold">
+                ⚙️ 調整配分比例
+            </a>
+            <a href="{% url 'courses:teacher_courses' %}" class="btn btn-outline-secondary fw-bold">
+                ← 返回授課管理
+            </a>
+        </div>
     </div>
 
     <div class="card card-custom p-4 shadow-sm">
-        <div class="bg-light p-3 rounded mb-4 border">
-            <h5 class="fw-bold text-dark mb-2">📌 成績登錄說明</h5>
-            <small class="text-secondary">
-                平時成績佔 <strong>30%</strong>，期中成績佔 <strong>35%</strong>，期末成績佔 <strong>35%</strong>。輸入後請點擊下方「儲存所有成績」按鈕。
-            </small>
+        <!-- 頂部提示：動態帶入老師設定的配分比例 -->
+        <div class="bg-light p-3 rounded mb-4 border d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+                <h5 class="fw-bold text-dark mb-1">📌 本門課評分標準</h5>
+                <small class="text-secondary">
+                    輸入平時、期中、期末分數後，系統將依據您設定的比例自動計算總成績。
+                </small>
+            </div>
+            <!-- 動態比例徽章顯示 -->
+            <div class="d-flex gap-2">
+                <span class="badge bg-primary fs-6 py-2 px-3">平時 {{ course.daily_weight }}%</span>
+                <span class="badge bg-info text-dark fs-6 py-2 px-3">期中 {{ course.midterm_weight }}%</span>
+                <span class="badge bg-warning text-dark fs-6 py-2 px-3">期末 {{ course.final_weight }}%</span>
+            </div>
         </div>
 
         <form method="post">
@@ -26,39 +42,50 @@
                 <table class="table table-hover align-middle border">
                     <thead class="table-dark">
                         <tr>
-                            <th>學號</th>
-                            <th>學生姓名</th>
-                            <th>平時成績 (30%)</th>
-                            <th>期中成績 (35%)</th>
-                            <th>期末成績 (35%)</th>
-                            <th>目前總成績</th>
+                            <th style="width: 12%;">學號</th>
+                            <th style="width: 15%;">學生姓名</th>
+                            <th style="width: 20%;">平時成績 ({{ course.daily_weight }}%)</th>
+                            <th style="width: 20%;">期中成績 ({{ course.midterm_weight }}%)</th>
+                            <th style="width: 20%;">期末成績 ({{ course.final_weight }}%)</th>
+                            <th style="width: 13%;">目前總成績</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for enrollment in enrollments %}
-                        <tr>
+                        <tr class="score-row">
                             <td class="fw-bold text-dark">{{ enrollment.student.student_id }}</td>
-                            <td class="fw-bold text-dark">{{ enrollment.student.user.last_name }}{{ enrollment.student.user.first_name }}</td>
-                            <td>
-                                <input type="number" step="0.1" min="0" max="100" name="daily_{{ enrollment.id }}" 
-                                       class="form-control form-control-sm" value="{{ enrollment.daily_score|default:'' }}" placeholder="0-100">
+                            <td class="fw-bold text-dark">
+                                {{ enrollment.student.user.last_name }}{{ enrollment.student.user.first_name }}
                             </td>
                             <td>
-                                <input type="number" step="0.1" min="0" max="100" name="midterm_{{ enrollment.id }}" 
-                                       class="form-control form-control-sm" value="{{ enrollment.midterm_score|default:'' }}" placeholder="0-100">
+                                <input type="number" step="0.1" min="0" max="100" 
+                                       name="daily_{{ enrollment.id }}" 
+                                       class="form-control form-control-sm score-input daily-score" 
+                                       value="{{ enrollment.daily_score|default:'' }}" 
+                                       placeholder="0-100">
                             </td>
                             <td>
-                                <input type="number" step="0.1" min="0" max="100" name="final_{{ enrollment.id }}" 
-                                       class="form-control form-control-sm" value="{{ enrollment.final_score|default:'' }}" placeholder="0-100">
+                                <input type="number" step="0.1" min="0" max="100" 
+                                       name="midterm_{{ enrollment.id }}" 
+                                       class="form-control form-control-sm score-input midterm-score" 
+                                       value="{{ enrollment.midterm_score|default:'' }}" 
+                                       placeholder="0-100">
                             </td>
                             <td>
-                                {% if enrollment.final_grade != None %}
-                                    <span class="fw-bold fs-6 {% if enrollment.final_grade >= 60 %}text-success{% else %}text-danger{% endif %}">
+                                <input type="number" step="0.1" min="0" max="100" 
+                                       name="final_{{ enrollment.id }}" 
+                                       class="form-control form-control-sm score-input final-score" 
+                                       value="{{ enrollment.final_score|default:'' }}" 
+                                       placeholder="0-100">
+                            </td>
+                            <td>
+                                <span class="fw-bold fs-6 calculated-grade {% if enrollment.final_grade and enrollment.final_grade >= 60 %}text-success{% elif enrollment.final_grade %}text-danger{% else %}text-muted{% endif %}">
+                                    {% if enrollment.final_grade != None %}
                                         {{ enrollment.final_grade }}
-                                    </span>
-                                {% else %}
-                                    <span class="text-muted small">未結算</span>
-                                {% endif %}
+                                    {% else %}
+                                        未結算
+                                    {% endif %}
+                                </span>
                             </td>
                         </tr>
                         {% empty %}
@@ -71,11 +98,57 @@
             </div>
 
             {% if enrollments %}
-            <div class="d-flex justify-content-end mt-4">
+            <div class="d-flex justify-content-between align-items-center mt-4 pt-2 border-top">
+                <span class="text-muted small">💡 提示：輸入分數時，總成績欄位將會根據上方比例即時試算。</span>
                 <button type="submit" class="btn btn-primary btn-lg fw-bold shadow-sm px-4">💾 儲存所有成績</button>
             </div>
             {% endif %}
         </form>
     </div>
 </div>
+
+<!-- 即時動態計算試算腳本 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 使用 parseFloat 與 Django 變數結合，避免 JS 將斜線誤判為正則表達式 (RegEx)
+        const dailyWeight = parseFloat("{{ course.daily_weight|default:0 }}") / 100.0;
+        const midtermWeight = parseFloat("{{ course.midterm_weight|default:0 }}") / 100.0;
+        const finalWeight = parseFloat("{{ course.final_weight|default:0 }}") / 100.0;
+
+        const rows = document.querySelectorAll('.score-row');
+
+        rows.forEach(row => {
+            const dailyInput = row.querySelector('.daily-score');
+            const midtermInput = row.querySelector('.midterm-score');
+            const finalInput = row.querySelector('.final-score');
+            const gradeDisplay = row.querySelector('.calculated-grade');
+
+            function calculateLiveGrade() {
+                const daily = parseFloat(dailyInput.value);
+                const midterm = parseFloat(midtermInput.value);
+                const final = parseFloat(finalInput.value);
+
+                // 只有當三個分數都有輸入時才計算總成績
+                if (!isNaN(daily) && !isNaN(midterm) && !isNaN(final)) {
+                    const total = (daily * dailyWeight) + (midterm * midtermWeight) + (final * finalWeight);
+                    const rounded = Math.round(total * 10) / 10;
+
+                    gradeDisplay.innerText = rounded;
+                    if (rounded >= 60) {
+                        gradeDisplay.className = 'fw-bold fs-6 calculated-grade text-success';
+                    } else {
+                        gradeDisplay.className = 'fw-bold fs-6 calculated-grade text-danger';
+                    }
+                } else {
+                    gradeDisplay.innerText = '未結算';
+                    gradeDisplay.className = 'fw-bold fs-6 calculated-grade text-muted';
+                }
+            }
+
+            dailyInput.addEventListener('input', calculateLiveGrade);
+            midtermInput.addEventListener('input', calculateLiveGrade);
+            finalInput.addEventListener('input', calculateLiveGrade);
+        });
+    });
+</script>
 {% endblock %}
