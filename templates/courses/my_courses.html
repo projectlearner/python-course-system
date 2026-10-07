@@ -4,18 +4,43 @@
 
 {% block content %}
 <style>
+    /* 橫式列印與單頁優化 */
     @media print {
+        @page {
+            size: landscape; /* 強制橫式列印 */
+            margin: 0.8cm;  /* 縮小邊界 */
+        }
+        
         body * {
             visibility: hidden;
         }
+        
         #printable-timetable, #printable-timetable * {
             visibility: visible;
         }
+        
         #printable-timetable {
             position: absolute;
             left: 0;
             top: 0;
             width: 100%;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+        }
+
+        .table-print {
+            font-size: 0.82rem !important; /* 壓縮字級以防超出頁面 */
+        }
+
+        .table-print td, .table-print th {
+            padding: 4px !important; /* 縮小儲存格邊距 */
+        }
+
+        .course-badge {
+            padding: 3px !important;
+            margin-bottom: 2px !important;
+            font-size: 0.75rem !important;
         }
     }
 </style>
@@ -23,18 +48,22 @@
 <div class="d-flex justify-content-between align-items-center mb-4 no-print">
     <h3 class="fw-bold text-dark mb-0">📅 個人課表</h3>
     <button onclick="window.print()" class="btn btn-outline-primary fw-bold">
-        <i class="bi bi-printer"></i> 列印 / 儲存課表 PDF
+        <i class="bi bi-printer"></i> 列印 / 儲存課表 PDF (橫式單頁)
     </button>
 </div>
 
 <div class="card card-custom p-4" id="printable-timetable">
     <div class="text-center mb-3 d-none d-print-block">
-        <h2 class="fw-bold">國立臺北商業大學 學生個人課表</h2>
-        <p class="mb-0">學生姓名：{{ request.user.student_profile.user.last_name }}{{ request.user.student_profile.user.first_name }} | 學號：{{ request.user.student_profile.student_id }}</p>
+        <h3 class="fw-bold mb-1">國立臺北商業大學 學生個人課表</h3>
+        <p class="mb-2 text-secondary">
+            學生姓名：{{ request.user.student_profile.user.last_name }}{{ request.user.student_profile.user.first_name }} | 
+            學號：{{ request.user.student_profile.student_id }} | 
+            系所：{{ request.user.student_profile.get_department_display }}
+        </p>
     </div>
 
     <div class="table-responsive">
-        <table class="table table-bordered text-center align-middle">
+        <table class="table table-bordered text-center align-middle table-print">
             <thead class="table-dark">
                 <tr>
                     <th style="width: 10%;">節次 / 時間</th>
@@ -50,14 +79,14 @@
             <tbody>
                 {% for period, time_str, days in grid %}
                 <tr>
-                    <td class="table-light fw-bold small">
+                    <td class="table-light fw-bold">
                         第 {{ period }} 節<br>
-                        <span class="text-muted fw-normal" style="font-size: 0.75rem;">{{ time_str }}</span>
+                        <span class="text-muted fw-normal" style="font-size: 0.72rem;">{{ time_str }}</span>
                     </td>
                     {% for cell in days %}
                     <td class="p-1">
                         {% for slot in cell %}
-                            <div class="p-2 rounded bg-primary bg-opacity-10 text-primary border border-primary small fw-bold mb-1">
+                            <div class="course-badge rounded bg-primary bg-opacity-10 text-primary border border-primary fw-bold">
                                 {{ slot.course.title }}<br>
                                 <span class="text-secondary fw-normal">{{ slot.course.get_classroom_display }}</span>
                             </div>

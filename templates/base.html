@@ -10,18 +10,22 @@
         :root {
             --slate-main: #0F172A;
             --slate-sidebar: #1E293B;
-            --slate-bg: #F1F5F9; /* 稍微加深背景，提升卡片對比 */
+            --slate-bg: #F1F5F9;
             --slate-card: #FFFFFF;
+            --sidebar-width: 260px;
+            --sidebar-collapsed-width: 70px;
         }
 
         body {
             background-color: var(--slate-bg);
             color: #1E293B;
             font-family: system-ui, -apple-system, sans-serif;
+            overflow-x: hidden;
         }
 
+        /* 側邊欄基本樣式與平滑過渡 */
         .sidebar {
-            width: 260px;
+            width: var(--sidebar-width);
             height: 100vh;
             position: fixed;
             top: 0;
@@ -29,17 +33,26 @@
             background-color: var(--slate-sidebar);
             color: #F1F5F9;
             z-index: 1000;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-x: hidden;
+            white-space: nowrap;
+        }
+
+        /* 側邊欄收合狀態 */
+        body.sidebar-collapsed .sidebar {
+            width: var(--sidebar-collapsed-width);
         }
 
         .sidebar .nav-link {
             color: #94A3B8;
             border-radius: 8px;
             margin: 4px 12px;
-            padding: 10px 16px;
+            padding: 10px 14px;
             font-weight: 500;
             display: flex;
             align-items: center;
             gap: 12px;
+            transition: all 0.2s ease;
         }
 
         .sidebar .nav-link:hover, .sidebar .nav-link.active {
@@ -47,22 +60,54 @@
             background-color: rgba(255, 255, 255, 0.15);
         }
 
+        /* 收合時隱藏文字與次要資訊 */
+        body.sidebar-collapsed .sidebar .hide-on-collapse {
+            display: none !important;
+        }
+
+        body.sidebar-collapsed .sidebar .nav-link {
+            justify-content: center;
+            padding: 10px 0;
+            margin: 4px 8px;
+        }
+
+        /* 主內容區域平滑適應 */
         .main-content {
-            margin-left: 260px;
+            margin-left: var(--sidebar-width);
             padding: 2rem;
             min-height: 100vh;
+            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.sidebar-collapsed .main-content {
+            margin-left: var(--sidebar-collapsed-width);
         }
 
         .card-custom {
             background-color: var(--slate-card);
             border-radius: 10px;
-            border: 1px solid #CBD5E1; /* 增強邊框清晰度 */
+            border: 1px solid #CBD5E1;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+
+        /* 側邊欄切換按鈕 */
+        .toggle-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #94A3B8;
+            border-radius: 6px;
+            padding: 4px 8px;
+            cursor: pointer;
+        }
+
+        .toggle-btn:hover {
+            color: #FFFFFF;
+            background: rgba(255, 255, 255, 0.2);
         }
 
         /* 全域列印控制 */
         @media print {
-            .sidebar, .btn, form, alert, nav, .no-print {
+            .sidebar, .btn, form, alert, nav, .no-print, .toggle-btn {
                 display: none !important;
             }
             .main-content {
@@ -80,50 +125,52 @@
     {% if user.is_authenticated %}
     <aside class="sidebar d-flex flex-column justify-content-between py-3 no-print" aria-label="主要導覽">
         <div>
-            <div class="px-4 mb-4">
-                <a href="{% url 'courses:course_list' %}" class="text-white text-decoration-none h5 fw-bold d-block mb-0">
-                    🎓 選課管理系統
+            <!-- 標頭與伸縮按鈕 -->
+            <div class="px-3 mb-4 d-flex align-items-center justify-content-between">
+                <a href="{% url 'courses:course_list' %}" class="text-white text-decoration-none h5 fw-bold mb-0 hide-on-collapse">
+                    🎓 選課系統
                 </a>
-                <small class="text-slate-400 fs-7" style="color: #94A3B8;">113 學年度 第一學期</small>
+                <button class="toggle-btn" id="sidebarToggle" title="切換側邊欄">
+                    <i class="bi bi-list fs-5"></i>
+                </button>
             </div>
 
             <nav class="nav flex-column">
-                <!-- 將 courses:student_profile 統一改為 users:student_profile -->
                 {% if user.student_profile %}
-                    <a href="{% url 'users:student_profile' %}" class="nav-link {% if request.resolver_match.url_name == 'student_profile' %}active{% endif %}">
-                        <i class="bi bi-house-door"></i> 🏠 個人概況
+                    <a href="{% url 'users:student_profile' %}" class="nav-link {% if request.resolver_match.url_name == 'student_profile' %}active{% endif %}" title="個人概況">
+                        <i class="bi bi-house-door fs-5"></i> <span class="hide-on-collapse">🏠 個人概況</span>
                     </a>
-                    <a href="{% url 'courses:my_courses' %}" class="nav-link {% if request.resolver_match.url_name == 'my_courses' %}active{% endif %}">
-                        <i class="bi bi-calendar-week"></i> 📅 我的課表
+                    <a href="{% url 'courses:my_courses' %}" class="nav-link {% if request.resolver_match.url_name == 'my_courses' %}active{% endif %}" title="我的課表">
+                        <i class="bi bi-calendar-week fs-5"></i> <span class="hide-on-collapse">📅 我的課表</span>
                     </a>
-                    <a href="{% url 'courses:course_list' %}" class="nav-link {% if request.resolver_match.url_name == 'course_list' %}active{% endif %}">
-                        <i class="bi bi-book"></i> 📚 線上選課
+                    <a href="{% url 'courses:course_list' %}" class="nav-link {% if request.resolver_match.url_name == 'course_list' %}active{% endif %}" title="線上選課">
+                        <i class="bi bi-book fs-5"></i> <span class="hide-on-collapse">📚 線上選課</span>
                     </a>
                 {% elif user.teacher_profile %}
-                    <a href="{% url 'users:student_profile' %}" class="nav-link {% if request.resolver_match.url_name == 'student_profile' %}active{% endif %}">
-                        <i class="bi bi-person-badge"></i> 🏠 個人概況
+                    <a href="{% url 'users:student_profile' %}" class="nav-link {% if request.resolver_match.url_name == 'student_profile' %}active{% endif %}" title="個人概況">
+                        <i class="bi bi-person-badge fs-5"></i> <span class="hide-on-collapse">🏠 個人概況</span>
                     </a>
-                    <a href="{% url 'courses:teacher_courses' %}" class="nav-link {% if request.resolver_match.url_name == 'teacher_courses' %}active{% endif %}">
-                        <i class="bi bi-journal-check"></i> 👨‍🏫 授課管理
+                    <a href="{% url 'courses:teacher_courses' %}" class="nav-link {% if request.resolver_match.url_name == 'teacher_courses' %}active{% endif %}" title="授課管理">
+                        <i class="bi bi-journal-check fs-5"></i> <span class="hide-on-collapse">👨‍🏫 授課管理</span>
                     </a>
-                    <a href="{% url 'courses:course_list' %}" class="nav-link {% if request.resolver_match.url_name == 'course_list' %}active{% endif %}">
-                        <i class="bi bi-search"></i> 📚 全校課程 (唯讀)
+                    <a href="{% url 'courses:course_list' %}" class="nav-link {% if request.resolver_match.url_name == 'course_list' %}active{% endif %}" title="全校課程">
+                        <i class="bi bi-search fs-5"></i> <span class="hide-on-collapse">📚 全校課程</span>
                     </a>
-                {% endif %}                
+                {% endif %}
             </nav>
         </div>
 
         <div class="px-3">
-            <div class="p-3 rounded bg-dark bg-opacity-50 mb-2">
-                <div class="fw-bold text-white fs-6">{{ user.username }}</div>
-                <small style="color: #94A3B8;">
+            <div class="p-2 rounded bg-dark bg-opacity-50 mb-2 text-center">
+                <div class="fw-bold text-white fs-6 hide-on-collapse">{{ user.username }}</div>
+                <small style="color: #94A3B8;" class="hide-on-collapse">
                     {% if user.student_profile %}學生{% elif user.teacher_profile %}教師{% else %}管理者{% endif %}
                 </small>
             </div>
             <form action="{% url 'logout' %}" method="post" class="w-100">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-outline-danger btn-sm w-100 d-flex align-items-center justify-content-center gap-2">
-                    <i class="bi bi-box-arrow-right"></i> 安全登出
+                    <i class="bi bi-box-arrow-right fs-6"></i> <span class="hide-on-collapse">安全登出</span>
                 </button>
             </form>
         </div>
@@ -144,5 +191,21 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 側邊欄切換邏輯 + 記憶狀態 (LocalStorage)
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        if (sidebarToggle) {
+            // 初始化狀態
+            if (localStorage.getItem('sidebar-collapsed') === 'true') {
+                document.body.classList.add('sidebar-collapsed');
+            }
+
+            sidebarToggle.addEventListener('click', () => {
+                document.body.classList.toggle('sidebar-collapsed');
+                const isCollapsed = document.body.classList.contains('sidebar-collapsed');
+                localStorage.setItem('sidebar-collapsed', isCollapsed);
+            });
+        }
+    </script>
 </body>
 </html>
