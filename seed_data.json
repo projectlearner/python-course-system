@@ -1,5 +1,154 @@
 [
 {
+    "model": "users.studentprofile",
+    "pk": 3,
+    "fields": {
+        "user": [
+            "114510"
+        ],
+        "student_id": "114510",
+        "department": "IM",
+        "grade": 2,
+        "max_credits": 25
+    }
+},
+{
+    "model": "users.studentprofile",
+    "pk": 4,
+    "fields": {
+        "user": [
+            "114511"
+        ],
+        "student_id": "114511",
+        "department": "FIN",
+        "grade": 2,
+        "max_credits": 25
+    }
+},
+{
+    "model": "users.studentprofile",
+    "pk": 5,
+    "fields": {
+        "user": [
+            "114512"
+        ],
+        "student_id": "114512",
+        "department": "BA",
+        "grade": 2,
+        "max_credits": 25
+    }
+},
+{
+    "model": "users.teacherprofile",
+    "pk": 2,
+    "fields": {
+        "user": [
+            "teacher_4"
+        ],
+        "teacher_id": "T001",
+        "department": "GEN"
+    }
+},
+{
+    "model": "users.teacherprofile",
+    "pk": 3,
+    "fields": {
+        "user": [
+            "teacher_6"
+        ],
+        "teacher_id": "T002",
+        "department": "IM"
+    }
+},
+{
+    "model": "users.teacherprofile",
+    "pk": 4,
+    "fields": {
+        "user": [
+            "teacher_2"
+        ],
+        "teacher_id": "T003",
+        "department": "IM"
+    }
+},
+{
+    "model": "users.teacherprofile",
+    "pk": 5,
+    "fields": {
+        "user": [
+            "teacher_5"
+        ],
+        "teacher_id": "T004",
+        "department": "IM"
+    }
+},
+{
+    "model": "users.teacherprofile",
+    "pk": 6,
+    "fields": {
+        "user": [
+            "teacher_3"
+        ],
+        "teacher_id": "T005",
+        "department": "IM"
+    }
+},
+{
+    "model": "users.teacherprofile",
+    "pk": 7,
+    "fields": {
+        "user": [
+            "teacher_7"
+        ],
+        "teacher_id": "T006",
+        "department": "IM"
+    }
+},
+{
+    "model": "users.teacherprofile",
+    "pk": 8,
+    "fields": {
+        "user": [
+            "teacher_11"
+        ],
+        "teacher_id": "T007",
+        "department": "IM"
+    }
+},
+{
+    "model": "users.teacherprofile",
+    "pk": 9,
+    "fields": {
+        "user": [
+            "teacher_12"
+        ],
+        "teacher_id": "T008",
+        "department": "GEN"
+    }
+},
+{
+    "model": "users.teacherprofile",
+    "pk": 10,
+    "fields": {
+        "user": [
+            "teacher_13"
+        ],
+        "teacher_id": "T009",
+        "department": "GEN"
+    }
+},
+{
+    "model": "users.teacherprofile",
+    "pk": 11,
+    "fields": {
+        "user": [
+            "T010"
+        ],
+        "teacher_id": "T010",
+        "department": "GEN"
+    }
+},
+{
     "model": "course.category",
     "pk": 4,
     "fields": {
@@ -649,155 +798,6 @@
     "pk": 1,
     "fields": {
         "current_phase": 3
-    }
-},
-{
-    "model": "users.studentprofile",
-    "pk": 3,
-    "fields": {
-        "user": [
-            "114510"
-        ],
-        "student_id": "114510",
-        "department": "IM",
-        "grade": 2,
-        "max_credits": 25
-    }
-},
-{
-    "model": "users.studentprofile",
-    "pk": 4,
-    "fields": {
-        "user": [
-            "114511"
-        ],
-        "student_id": "114511",
-        "department": "FIN",
-        "grade": 2,
-        "max_credits": 25
-    }
-},
-{
-    "model": "users.studentprofile",
-    "pk": 5,
-    "fields": {
-        "user": [
-            "114512"
-        ],
-        "student_id": "114512",
-        "department": "BA",
-        "grade": 2,
-        "max_credits": 25
-    }
-},
-{
-    "model": "users.teacherprofile",
-    "pk": 2,
-    "fields": {
-        "user": [
-            "teacher_4"
-        ],
-        "teacher_id": "T001",
-        "department": "GEN"
-    }
-},
-{
-    "model": "users.teacherprofile",
-    "pk": 3,
-    "fields": {
-        "user": [
-            "teacher_6"
-        ],
-        "teacher_id": "T002",
-        "department": "IM"
-    }
-},
-{
-    "model": "users.teacherprofile",
-    "pk": 4,
-    "fields": {
-        "user": [
-            "teacher_2"
-        ],
-        "teacher_id": "T003",
-        "department": "IM"
-    }
-},
-{
-    "model": "users.teacherprofile",
-    "pk": 5,
-    "fields": {
-        "user": [
-            "teacher_5"
-        ],
-        "teacher_id": "T004",
-        "department": "IM"
-    }
-},
-{
-    "model": "users.teacherprofile",
-    "pk": 6,
-    "fields": {
-        "user": [
-            "teacher_3"
-        ],
-        "teacher_id": "T005",
-        "department": "IM"
-    }
-},
-{
-    "model": "users.teacherprofile",
-    "pk": 7,
-    "fields": {
-        "user": [
-            "teacher_7"
-        ],
-        "teacher_id": "T006",
-        "department": "IM"
-    }
-},
-{
-    "model": "users.teacherprofile",
-    "pk": 8,
-    "fields": {
-        "user": [
-            "teacher_11"
-        ],
-        "teacher_id": "T007",
-        "department": "IM"
-    }
-},
-{
-    "model": "users.teacherprofile",
-    "pk": 9,
-    "fields": {
-        "user": [
-            "teacher_12"
-        ],
-        "teacher_id": "T008",
-        "department": "GEN"
-    }
-},
-{
-    "model": "users.teacherprofile",
-    "pk": 10,
-    "fields": {
-        "user": [
-            "teacher_13"
-        ],
-        "teacher_id": "T009",
-        "department": "GEN"
-    }
-},
-{
-    "model": "users.teacherprofile",
-    "pk": 11,
-    "fields": {
-        "user": [
-            "T010"
-        ],
-        "teacher_id": "T010",
-        "department": "GEN"
     }
 }
 ]
