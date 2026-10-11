@@ -81,13 +81,16 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        # 如果環境變數有抓到 DATABASE_URL 就用雲端的，沒有的話才用本機 sqlite3
         default=os.environ.get('DATABASE_URL', 'sqlite:///db.sqlite3'),
         conn_max_age=600,
-        ssl_require=True
     )
 }
 
+# 只有在非 sqlite（即使用雲端 PostgreSQL 時）才強制加上 ssl_require
+if 'sqlite' not in DATABASES['default']['ENGINE']:
+    DATABASES['default']['OPTIONS'] = {
+        'sslmode': 'require'
+    }
 # Password validation
 # https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators
 
