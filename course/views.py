@@ -2,11 +2,13 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import transaction
-from .models import Course, Enrollment, CourseTime, DEPARTMENT_CHOICES, CATEGORY_CHOICES
+from .models import Course, Enrollment, CourseTime, DEPARTMENT_CHOICES, CATEGORY_CHOICES, SystemSetting
 from django.core.exceptions import ValidationError
 
-# 目前選課階段
-CURRENT_PHASE = 2
+def get_current_phase():
+    """動態從資料庫取得選課階段，若後台沒建則預設為 2"""
+    setting, created = SystemSetting.objects.get_or_create(id=1, defaults={'current_phase': 2})
+    return setting.current_phase
 
 
 def check_course_permission(student, course, current_phase):
@@ -64,7 +66,8 @@ def course_list(request):
             Enrollment.objects.filter(student=student_profile).values_list('course_id', flat=True)
         )
 
-    current_phase = CURRENT_PHASE
+    # 👉 這裡改為動態呼叫
+    current_phase = get_current_phase()
     course_data = []
 
     for course in courses:
@@ -108,7 +111,8 @@ def course_detail(request, course_id):
     is_enrolled = False
     can_enroll = False
     disabled_reason = ""
-    current_phase = CURRENT_PHASE
+    # 👉 這裡改為動態呼叫
+    current_phase = get_current_phase()
     is_teacher = hasattr(request.user, 'teacher_profile')
 
     if request.user.is_authenticated:
@@ -141,7 +145,8 @@ def enroll_course(request, course_id):
     """加選課程邏輯"""
     if request.method == 'POST':
         course = get_object_or_404(Course, id=course_id)
-        current_phase = CURRENT_PHASE
+        # 👉 這裡改為動態呼叫
+        current_phase = get_current_phase()
 
         if not hasattr(request.user, 'student_profile'):
             messages.error(request, '只有學生身份可以進行選課！')

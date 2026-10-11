@@ -195,3 +195,14 @@ class Course(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class SystemSetting(models.Model):
+    current_phase = models.IntegerField(default=2, verbose_name="目前選課階段")
+
+    def __str__(self):
+        return f"目前選課階段：第 {self.current_phase} 階段"
+
+    class Meta:
+        verbose_name = "系統選課階段設定"
+        verbose_name_plural = verbose_name
