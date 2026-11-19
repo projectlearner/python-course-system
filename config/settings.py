@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.parse('你的Neon完整連線網址')
+    'default': dj_database_url.parse('postgresql://neondb_owner:npg_iY3FS7abGjUW@ep-royal-feather-b31o5iwe-pooler.c-4.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require')
 }
 
 # 只有在非 sqlite（即使用雲端 PostgreSQL 時）才強制加上 ssl_require
